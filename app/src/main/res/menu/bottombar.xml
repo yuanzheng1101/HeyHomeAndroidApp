@@ -5,15 +5,15 @@
         android:icon="@drawable/ic_homepage"
         android:title="Home" />
     <item
-        android:id="@+id/bb_explore"
-        android:icon="@drawable/ic_explore"
-        android:title="Explore" />
+        android:id="@+id/bb_gallery"
+        android:icon="@drawable/ic_gallery"
+        android:title="Gallery" />
     <item
         android:id="@+id/bb_publish"
         android:icon="@drawable/ic_publish"
         android:title="Publish" />
     <item
-        android:id="@+id/bb_favorites"
+        android:id="@+id/bb_favorite"
         android:icon="@drawable/ic_favorites"
         android:title="Favorite" />
     <item

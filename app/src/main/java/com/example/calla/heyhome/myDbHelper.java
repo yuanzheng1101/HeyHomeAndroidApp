@@ -147,7 +147,7 @@ public class myDbHelper extends SQLiteOpenHelper {
     public Cursor searchPeople(String str) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        //??double check regular expression syntax
+        // todo double check regular expression syntax
         return  db.rawQuery("SELECT * FROM users WHERE name REGEXP %" + str + "%;", null);
     }
 

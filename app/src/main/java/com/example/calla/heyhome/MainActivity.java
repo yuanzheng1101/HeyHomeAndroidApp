@@ -20,34 +20,48 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        createButtomBar(savedInstanceState);
+
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Necessary to restore the BottomBar's state, otherwise we would
+        // lose the current tab on orientation change.
+        mBottomBar.onSaveInstanceState(outState);
+    }
+
+    public void createButtomBar(Bundle savedInstanceState) {
         mBottomBar = BottomBar.attach(this, savedInstanceState);
         mBottomBar.setItemsFromMenu(R.menu.bottombar, new OnMenuTabClickListener() {
             @Override
             public void onMenuTabSelected(@IdRes int menuItemId) {
                 switch (menuItemId) {
                     case R.id.bb_homepage:
+                        openPageHomepage();
                         break;
-                    case R.id.bb_explore:
-                        Intent intent = new Intent(MainActivity.this, Explore.class);
-                        startActivity(intent);
+                    case R.id.bb_gallery:
+                        openPageGallery();
                         break;
                     case R.id.bb_publish:
+                        openPagePublish();
                         break;
-                    case R.id.bb_favorites:
+                    case R.id.bb_favorite:
+                        openPageFavorite();
                         break;
                     case R.id.bb_me:
+                        openPageMe();
                         break;
                 }
             }
 
             @Override
             public void onMenuTabReSelected(@IdRes int menuItemId) {
-//                if (menuItemId == R.id.bb_explore) {
-//                    // The user reselected item number one, scroll your content to top.
-//                    // The user selected explore in bottom bar
-//                    Intent intent = new Intent(MainActivity.this, Explore.class);
-//                    startActivity(intent);
-//                }
+                //todo reselect
+
             }
 
 
@@ -60,24 +74,53 @@ public class MainActivity extends AppCompatActivity {
         mBottomBar.mapColorForTab(2, "#7B1FA2");
         mBottomBar.mapColorForTab(3, "#FF5252");
         mBottomBar.mapColorForTab(4, "#FF9800");
-
-//        Button b1 = (Button) findViewById(R.id.button);
-//        b1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, Explore.class);
-//                startActivity(intent);
-//            }
-//        });
-
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
 
-        // Necessary to restore the BottomBar's state, otherwise we would
-        // lose the current tab on orientation change.
-        mBottomBar.onSaveInstanceState(outState);
+    // invoke five main fragments
+
+    private void openPageHomepage() {
+        Bundle bundle = new Bundle();
+        Page_Homepage page = new Page_Homepage();
+        page.setArguments(bundle);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.mainFragment, page)
+                .commit();
+    }
+
+    private void openPageGallery() {
+        Bundle bundle = new Bundle();
+        Page_Gallery page = new Page_Gallery();
+        page.setArguments(bundle);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.mainFragment, page)
+                .commit();
+    }
+
+    private void openPagePublish() {
+        Bundle bundle = new Bundle();
+        Page_Publish page = new Page_Publish();
+        page.setArguments(bundle);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.mainFragment, page)
+                .commit();
+    }
+
+    private void openPageFavorite() {
+        Bundle bundle = new Bundle();
+        Page_Favorite page = new Page_Favorite();
+        page.setArguments(bundle);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.mainFragment, page)
+                .commit();
+    }
+
+    private void openPageMe() {
+        Bundle bundle = new Bundle();
+        Page_Me page = new Page_Me();
+        page.setArguments(bundle);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.mainFragment, page)
+                .commit();
     }
 }

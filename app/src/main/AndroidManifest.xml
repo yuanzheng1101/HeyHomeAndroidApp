@@ -15,9 +15,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Explore" />
-        <activity android:name=".Favorite" />
-        <activity android:name=".Me"></activity>
+        <activity android:name=".Page_Homepage" />
+        <activity android:name=".Page_Gallery" />
+        <activity android:name=".Page_Publish" />
+        <activity android:name=".Page_Favorite" />
+        <activity android:name=".Page_Me"></activity>
     </application>
 
 </manifest>
