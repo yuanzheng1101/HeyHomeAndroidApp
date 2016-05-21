@@ -1,7 +1,7 @@
 package com.example.calla.heyhome;
 
 /**
- * Created by Calla on 5/17/16.
+ * Created by Calla on 5/21/16.
  */
 public class Gallery {
 
@@ -18,5 +18,4 @@ public class Gallery {
         this.image = image;
         this.time = time;
     }
-
 }
