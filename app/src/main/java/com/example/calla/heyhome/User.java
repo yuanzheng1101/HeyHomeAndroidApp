@@ -13,7 +13,7 @@ public class User {
     int followingCount;
     int followerCount;
 
-    public User (String name, String passsword, String email, String description, String photo, int followingCount, int followerCount) {
+    public User(String name, String passsword, String email, String description, String photo, int followingCount, int followerCount) {
         this.name = name;
         this.passsword = passsword;
         this.email = email;
@@ -22,5 +22,39 @@ public class User {
         this.followingCount = followingCount;
         this.followerCount = followerCount;
     }
+
+    public User() {
+        // empty default constructor, necessary for Firebase to be able to deserialize blog posts
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPasssword() {
+        return passsword;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public int getFollowingCount() {
+        return followingCount;
+    }
+
+    public int getFollowerCount() {
+        return followerCount;
+    }
+
+
 
 }
