@@ -191,16 +191,16 @@ public class myDbHelper extends SQLiteOpenHelper {
 
 
     //TABLE records methods
-    public void addRecord(Record r) {
+    public long addRecord(Record r) {
         SQLiteDatabase db = this.getReadableDatabase();
-
         ContentValues contentValues = new ContentValues();
         contentValues.put("user", r.user);
         contentValues.put("caption", r.caption);
         contentValues.put("image", r.image);
         contentValues.put("time", r.time);
 
-        db.insert("records", null, contentValues);
+        long id = db.insert("records", null, contentValues);
+        return id;
     }
 
     public Cursor getRecords(int uid) {
