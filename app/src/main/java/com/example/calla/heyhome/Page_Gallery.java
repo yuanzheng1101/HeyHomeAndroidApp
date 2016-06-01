@@ -32,19 +32,19 @@ public class Page_Gallery extends Fragment implements AdapterView.OnItemSelected
             R.drawable.pic04_small, R.drawable.pic05_small,
             R.drawable.pic06_small, R.drawable.pic07_small,
             R.drawable.pic08_small, R.drawable.pic09_small,
-            R.drawable.pic10_small, R.drawable.pic11_small,
-            R.drawable.pic12_small, R.drawable.pic13_small,
-            R.drawable.pic14_small, R.drawable.pic15_small };
+            R.drawable.pic10_small, R.drawable.homedec_5,
+            R.drawable.homedec_4, R.drawable.homedec_3,
+            R.drawable.homedec_2, R.drawable.homedec_1 };
 
     //initialize array of high-resolution images (1024x768)
-    Integer[] largeImages = { R.drawable.pic01_large,
+    /*Integer[] largeImages = { R.drawable.pic01_large,
             R.drawable.pic02_large, R.drawable.pic03_large,
             R.drawable.pic04_large, R.drawable.pic05_large,
             R.drawable.pic06_large, R.drawable.pic07_large,
             R.drawable.pic08_large, R.drawable.pic09_large,
             R.drawable.pic10_large, R.drawable.pic11_large,
             R.drawable.pic12_large, R.drawable.pic13_large,
-            R.drawable.pic14_large, R.drawable.pic15_large };
+            R.drawable.pic14_large, R.drawable.pic15_large };*/
 
     //in case you want to use-save state values
     Bundle myOriginalMemoryBundle;
@@ -106,8 +106,8 @@ public class Page_Gallery extends Fragment implements AdapterView.OnItemSelected
                 selections[2] = styles[position] == "style" ? "" : styles[position];
                 break;
         }
-        Toast.makeText(getActivity().getApplicationContext(),
-                selections[0] + " " + selections[1] + " " + selections[2] + " are selected!", Toast.LENGTH_SHORT).show();
+        /*Toast.makeText(getActivity().getApplicationContext(),
+                selections[0] + " " + selections[1] + " " + selections[2] + " are selected!", Toast.LENGTH_SHORT).show();*/
     }
 
     @Override

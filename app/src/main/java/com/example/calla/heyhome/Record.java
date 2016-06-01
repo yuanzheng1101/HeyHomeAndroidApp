@@ -10,6 +10,8 @@ public class Record {
     String image;
     String time;
 
+    public Record(){};
+
     public Record (int user, String caption, String image, String time) {
         this.user = user;
         this.caption = caption;
