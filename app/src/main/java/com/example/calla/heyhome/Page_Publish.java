@@ -1,32 +1,12 @@
 package com.example.calla.heyhome;
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
 public class Page_Publish extends Fragment {
@@ -56,12 +36,18 @@ public class Page_Publish extends Fragment {
 
         // re-take photo
         Button buttom = (Button) rootView.findViewById(R.id.button);
-//        buttom.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                publishChoicesDialog();
-//            }
-//        });
+        buttom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                Page_Homepage page = new Page_Homepage();
+                page.setArguments(bundle);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.mainFragment, page)
+                        .commit();
+                MainActivity.mBottomBar.selectTabAtPosition(0, true);
+            }
+        });
 
         return rootView;
     }

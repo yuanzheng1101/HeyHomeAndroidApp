@@ -1,54 +1,35 @@
 package com.example.calla.heyhome;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
-import android.os.SystemClock;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-
-//import com.firebase.client.Firebase;
-import com.firebase.client.Firebase;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+//import com.firebase.client.Firebase;
+
 public class MainActivity extends AppCompatActivity {
 
-    private BottomBar mBottomBar;
+    public static BottomBar mBottomBar;
     private DBFirebase dbFirebase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
         createButtomBar(savedInstanceState);
 
         //create Firebase
-        Firebase.setAndroidContext(this);
-        dbFirebase = new DBFirebase();
+//        Firebase.setAndroidContext(this);
+//        dbFirebase = new DBFirebase();
 
 
         //test firebase button
@@ -91,9 +72,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-
-        ImageView image = (ImageView) findViewById(R.id.imageView);
+//        FirebaseStorage storage = FirebaseStorage.getInstance();
+//
+//        ImageView image = (ImageView) findViewById(R.id.imageView);
 
 //        String path = "http://www.bachmanbuilders.com/img/Anna%20Mae%20Drive.jpg";
 
@@ -109,35 +90,35 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
 
-
-        StorageReference storageRef = storage.getReferenceFromUrl("gs://intense-inferno-3371.appspot.com");
-        StorageReference fileRef = storageRef.child("images/image4.jpg");
-        String path = fileRef.getPath();
-        String name = fileRef.getName();
-        System.out.println(path);
-        System.out.println(name);
 //
+//        StorageReference storageRef = storage.getReferenceFromUrl("gs://intense-inferno-3371.appspot.com");
+//        StorageReference fileRef = storageRef.child("images/image6.jpeg");
+//        String path = fileRef.getPath();
+//        String name = fileRef.getName();
+//        System.out.println(path);
+//        System.out.println(name);
+////
+////
+//        final long ONE_MEGABYTE = 128 * 128;
+//        fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//            @Override
+//            public void onSuccess(byte[] bytes) {
+//                // Data for "images/image1.png" is returns, use this as needed
+//                System.out.println("Imgae has been stored into byte[] bytes");
 //
-        final long ONE_MEGABYTE = 512 * 512;
-        fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                // Data for "images/image1.png" is returns, use this as needed
-                System.out.println("Imgae has been stored into byte[] bytes");
-
-//                image.setImageURI(Uri.parse("ddd"));
-                Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                ImageView view = (ImageView) findViewById(R.id.imageView);
-                view.setImageBitmap(bm);
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-                System.out.println("Failed to load image from Firebase!!!");
-            }
-        });
+////                image.setImageURI(Uri.parse("ddd"));
+////                Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+////                ImageView view = (ImageView) findViewById(R.id.imageView);
+////                view.setImageBitmap(bm);
+//
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Handle any errors
+//                System.out.println("Failed to load image from Firebase!!!");
+//            }
+//        });
 
 
 //        image.setImageURI(storageRef.child("images/image1.png").getDownloadUrl().getResult());
@@ -184,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void createButtomBar(Bundle savedInstanceState) {
         mBottomBar = BottomBar.attach(this, savedInstanceState);
+
         mBottomBar.setItemsFromMenu(R.menu.bottombar, new OnMenuTabClickListener() {
             @Override
             public void onMenuTabSelected(@IdRes int menuItemId) {
