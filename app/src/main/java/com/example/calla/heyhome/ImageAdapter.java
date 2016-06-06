@@ -1,6 +1,7 @@
 package com.example.calla.heyhome;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,9 +14,10 @@ import android.widget.ImageView;
 public class ImageAdapter extends BaseAdapter{
 
     private Context context;	// calling activity context
-    Integer[] smallImages;		// thumbnail data set
+    Bitmap[] smallImages;		// thumbnail data set
+//    Integer[] smallImages;
 
-    public ImageAdapter(Context callingActivityContext, Integer[] thumbnails) {
+    public ImageAdapter(Context callingActivityContext, Bitmap[] thumbnails) {
         context = callingActivityContext;
         smallImages = thumbnails;
     }
@@ -51,7 +53,9 @@ public class ImageAdapter extends BaseAdapter{
         } else {
             imageView = (SquareImageView) convertView;
         }
-        imageView.setImageResource(smallImages[position]);
+        imageView.setImageBitmap(smallImages[position]);
+//        imageView.setImageResource(smallImages[position]);
+//        System.out.println("position bm: " + smallImages[position].toString().length());
         return imageView;
     }
 

@@ -1,24 +1,26 @@
 package com.example.calla.heyhome;
 
+import java.util.List;
+
 /**
  * Created by Calla on 5/17/16.
  */
 public class User {
 
     String name;
-    String passsword;
-    String email;
     String description;
     String photo;
+    String followings;
+    String followers;
     int followingCount;
     int followerCount;
 
-    public User(String name, String passsword, String email, String description, String photo, int followingCount, int followerCount) {
+    public User(String name, String description, String photo, String followings, String followers, int followingCount, int followerCount) {
         this.name = name;
-        this.passsword = passsword;
-        this.email = email;
         this.description = description;
         this.photo = photo;
+        this.followings = followings;
+        this.followers = followers;
         this.followingCount = followingCount;
         this.followerCount = followerCount;
     }
@@ -29,14 +31,6 @@ public class User {
 
     public String getName() {
         return name;
-    }
-
-    public String getPasssword() {
-        return passsword;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public String getDescription() {
@@ -55,6 +49,11 @@ public class User {
         return followerCount;
     }
 
+    public String getFollowings() {
+        return followings;
+    }
 
-
+    public String getFollowers() {
+        return followers;
+    }
 }

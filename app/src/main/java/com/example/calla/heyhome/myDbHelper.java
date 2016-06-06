@@ -118,8 +118,8 @@ public class myDbHelper extends SQLiteOpenHelper {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", u.name);
-        contentValues.put("password", u.passsword);
-        contentValues.put("email", u.email);
+//        contentValues.put("password", u.passsword);
+//        contentValues.put("email", u.email);
         contentValues.put("description", u.description);
         contentValues.put("photo", u.photo);
         contentValues.put("followingCount", u.followingCount);
