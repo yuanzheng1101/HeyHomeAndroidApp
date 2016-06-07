@@ -9,15 +9,25 @@ public class CardInfo {
     protected String userName;
     protected String location;
     protected String userPostedCaption;
-    protected int userPostedPhoto; // R.id.photo
-    protected String favIcon;
+    protected int userPostedPhoto; // R.id.photo todo need change this to string
+    protected boolean favIcon;
     protected String userPostedTime;
-    protected String friendName;
-    protected String friendComment;
 
     public CardInfo(int userPostedPhoto, String userPostedCaption) {
         this.userPostedPhoto = userPostedPhoto;
         this.userPostedCaption = userPostedCaption;
+    }
+
+    public CardInfo(String userProfileImgPath, String userName, String location,
+                    String userPostedCaption, int userPostedPhoto, boolean favIcon,
+                    String userPostedTime) {
+        this.userProfileImgPath = userProfileImgPath;
+        this.userName = userName;
+        this.location = location;
+        this.userPostedCaption = userPostedCaption;
+        this.userPostedPhoto = userPostedPhoto;
+        this.favIcon = favIcon;
+        this.userPostedTime = userPostedTime;
     }
 
     public String getUserProfileImgPath() {
@@ -35,17 +45,11 @@ public class CardInfo {
     public int getUserPostedPhoto() {
         return userPostedPhoto;
     }
-    public String getFavIcon() {
+    public boolean getFavIcon() {
         return favIcon;
     }
     public String getUserPostedTime() {
         return userPostedTime;
-    }
-    public String getFriendName() {
-        return friendName;
-    }
-    public String getFriendComment() {
-        return friendComment;
     }
 
 }

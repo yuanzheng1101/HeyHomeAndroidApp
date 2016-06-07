@@ -13,30 +13,92 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         android:orientation="vertical"
         tools:context="edu.scu.yzheng.photonotes.ViewPhotoActivity">
-
-        <ImageView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:id="@+id/imageView"
-            android:layout_margin="10dp"
-            android:layout_gravity="center_horizontal"
-            android:contentDescription="large image" />
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="10dp"
+                android:id="@+id/user_profile_img"
+                android:src="@drawable/logged_in_user"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/user_profile_img"
+                android:layout_centerVertical="true"
+                android:text="bababa"
+                android:id="@+id/user_name"/>
+            <TextView
+                android:id="@+id/post_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:text="location" />
+            <ImageView
+                android:id="@+id/post_location_img"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_toLeftOf="@+id/post_location"
+                android:layout_centerVertical="true"
+                android:src="@drawable/location" />
+        </RelativeLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:layout_margin="10dp"
             android:text="New Text"
-            android:id="@+id/textView" />
+            android:id="@+id/user_post_caption" />
 
-        <Button
-            android:layout_width="wrap_content"
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:id="@+id/user_post_picture"
+            android:layout_gravity="center_horizontal"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Return"
-            android:id="@+id/button"
-            android:layout_gravity="center"/>
+            android:layout_below="@+id/user_post_picture"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/threeIcons">
 
+            <ImageView
+                android:id="@+id/user_post_fav_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/heart_icon" />
+
+            <ImageView
+                android:id="@+id/user_post_comment_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/comment_icon" />
+
+            <ImageView
+                android:id="@+id/user_post_forward_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/forward_icon" />
+            <android.support.v4.widget.Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/user_post_time"
+                android:text="time"/>
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
