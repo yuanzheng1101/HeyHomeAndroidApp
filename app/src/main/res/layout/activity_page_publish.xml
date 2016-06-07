@@ -11,6 +11,10 @@
     tools:context="com.example.calla.heyhome.Page_Publish">
 
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/caption"/>
 
     <ImageView
         android:layout_width="match_parent"
@@ -22,8 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/image"
-        android:text="Save"
-        android:id="@+id/button" />
+        android:text="Publish"
+        android:id="@+id/save" />
 
 
 </RelativeLayout>

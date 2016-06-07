@@ -5,17 +5,47 @@ package com.example.calla.heyhome;
  */
 public class Record {
 
-    int user;
-    String caption;
-    String image;
-    String time;
+    private String user;
+    private String image;
+    private String caption;
+    private String comments;
+    private String location;
+    private String time;
+
+    public Record (String user, String image, String caption, String comments, String location, String time) {
+        this.user = user;
+        this.image = image;
+        this.caption = caption;
+        this.comments = comments;
+        this.location = location;
+        this.time = time;
+    }
 
     public Record(){};
 
-    public Record (int user, String caption, String image, String time) {
-        this.user = user;
-        this.caption = caption;
-        this.image = image;
-        this.time = time;
+    public String getUser() {
+        return user;
     }
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+
 }

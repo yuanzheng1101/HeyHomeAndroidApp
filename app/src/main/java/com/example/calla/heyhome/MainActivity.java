@@ -17,6 +17,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+//import com.firebase.client.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
@@ -27,131 +30,37 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-//import com.firebase.client.Firebase;
 
 public class MainActivity extends AppCompatActivity {
 
     public static BottomBar mBottomBar;
-    private DBFirebase dbFirebase;
+
+    // for publish
+    public static String imageFromCamera;
+    public static Bitmap imageFromLibrary;
+    public static Uri imageUri;
+
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //set bottom bar
+        // check user logged in or not
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            Intent intent = new Intent(MainActivity.this, SignIn.class);
+            startActivity(intent);
+        }
+
+        // set bottom bar
         createButtomBar(savedInstanceState);
 
-        //create Firebase
+        // set Firebase
 //        Firebase.setAndroidContext(this);
-//        dbFirebase = new DBFirebase();
+//        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
-
-        //test firebase button
-//        Button button = (Button) findViewById(R.id.button);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                User user1 = new User("", "abc", "jim@scu", "aaaaaa", "path", 0, 0);
-//                User user2 = new User("LiLei", "dddd", "dave@scu", "bbbbbbbb", "oooo", 1, 2);
-//                dbFirebase.addUser(user1);
-//                dbFirebase.addUser(user2);
-//
-//            }
-//        });
-//
-//        Button button2 = (Button) findViewById(R.id.button2);
-//        button2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String name = "Zhang";
-//                dbFirebase.searchUser(name);
-//
-//            }
-//        });
-
-
-
-
-
-
-//        FirebaseStorage storage = FirebaseStorage.getInstance();
-//
-//        ImageView image = (ImageView) findViewById(R.id.imageView);
-
-//        String path = "http://www.bachmanbuilders.com/img/Anna%20Mae%20Drive.jpg";
-
-
-        // hard coed test for image
-//        try {
-//            InputStream inputStream = getApplicationContext().getAssets().open("icon_dog.png");
-//            Drawable drawable = Drawable.createFromStream(inputStream, null);
-//            image.setImageDrawable(drawable);
-//            image.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-
-//
-//        StorageReference storageRef = storage.getReferenceFromUrl("gs://intense-inferno-3371.appspot.com");
-//        StorageReference fileRef = storageRef.child("images/image6.jpeg");
-//        String path = fileRef.getPath();
-//        String name = fileRef.getName();
-//        System.out.println(path);
-//        System.out.println(name);
-////
-////
-//        final long ONE_MEGABYTE = 128 * 128;
-//        fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//            @Override
-//            public void onSuccess(byte[] bytes) {
-//                // Data for "images/image1.png" is returns, use this as needed
-//                System.out.println("Imgae has been stored into byte[] bytes");
-//
-////                image.setImageURI(Uri.parse("ddd"));
-////                Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-////                ImageView view = (ImageView) findViewById(R.id.imageView);
-////                view.setImageBitmap(bm);
-//
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                // Handle any errors
-//                System.out.println("Failed to load image from Firebase!!!");
-//            }
-//        });
-
-
-//        image.setImageURI(storageRef.child("images/image1.png").getDownloadUrl().getResult());
-
-
-        //////// upload files //////////////////
-        // Get the data from an ImageView as bytes
-//        image.setDrawingCacheEnabled(true);
-//        image.buildDrawingCache();
-//        Bitmap bitmap = image.getDrawingCache();
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//        byte[] data = baos.toByteArray();
-//        System.out.println(data.length);
-//
-//        StorageReference mountainsRef = storageRef.child("images/mountains.jpg");
-//
-//        UploadTask uploadTask = mountainsRef.putBytes(data);
-//        uploadTask.addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                // Handle unsuccessful uploads
-//                System.out.println("Upload image error!!!");
-//            }
-//        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-//                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-//            }
-//        });
 
 
     }
@@ -174,12 +83,13 @@ public class MainActivity extends AppCompatActivity {
                 switch (menuItemId) {
                     case R.id.bb_homepage:
                         openPageHomepage();
+//                        Intent intent = new Intent(MainActivity.this, SignIn.class);
+//                        startActivity(intent);
                         break;
                     case R.id.bb_gallery:
                         openPageGallery();
                         break;
                     case R.id.bb_publish:
-//                        openPagePublish();
                         publishChoicesDialog();
                         break;
                     case R.id.bb_favorite:
@@ -197,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-
         });
 
         // Setting colors for different tabs when there's more than three of them.
@@ -210,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // invoke five main fragments
+    ///////////////////////// invoke five main fragments /////////////////////////
 
     private void openPageHomepage() {
         Bundle bundle = new Bundle();
@@ -287,12 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    ///////////////////////// publish /////////////////////////
-
-    String userChoosenTask;
-    public static String imageFromCamera;
-    public static Bitmap imageFromLibrary;
-    public static Uri imageUri;
+    ///////////////////////// publish a record /////////////////////////
 
     private void publishChoicesDialog() {
         final CharSequence[] items = { "From Camera", "From Library", "Cancel" };
@@ -301,14 +205,13 @@ public class MainActivity extends AppCompatActivity {
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                Log.v("calla", "position is: " + item);
                 boolean permit = Utility.checkPermission(MainActivity.this);
                 if (items[item].equals("From Camera")) {
-                    userChoosenTask="From Camera";
+//                    userChoosenTask="From Camera";
                     if(permit)
                         fromCamera();    // call function below
                 } else if (items[item].equals("From Library")) {
-                    userChoosenTask="From Library";
+//                    userChoosenTask="From Library";
                     if(permit)
                         fromLibrary();   // call function below
                 } else if (items[item].equals("Cancel")) {
@@ -352,10 +255,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 4321:   // from library
 //                saveImageFromLibrary(data);
-
                 imageUri = data.getData();
-                System.out.println(imageUri);
-
                 openPagePublish();
                 break;
         }
@@ -387,23 +287,4 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-    //////////////////////////////////////////////////
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            Log.e("src",src);
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            Log.e("Bitmap","returned");
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("Exception",e.getMessage());
-            return null;
-        }
-    }
 }

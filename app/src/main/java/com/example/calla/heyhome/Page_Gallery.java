@@ -1,58 +1,67 @@
 package com.example.calla.heyhome;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Page_Gallery extends Fragment implements AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
 
-    String[] brands = {"Brand", "Basset", "RH", "Crate & Barrel", "Ethan Allen", "IKEA", "Pottery Barn", "West elm"};
-    String[] rooms = {"Room", "Living", "Bedroom", "Kitchen", "Dining", "Bathroom"};
-    String[] styles = {"Style", "Contemporary", "Modern", "Transitional", "Traditional", "Farmhouse", "Rustic"};
-    String[] selections = new String[3];
+    private static String[] brands = {"Brand", "Bassett", "Ethan Allen", "IKEA", "Pottery Barn"};
+    private static String[] rooms = {"Room", "Living", "Bedroom", "Kitchen", "Dining", "Bathroom"};
+    private static String[] styles = {"Style", "Contemporary", "Transitional", "Traditional"};
 
-    GridView gridview;
-    ImageView soloPhoto;
-    Button btnBack;
+    private GridView gridview;
+    private final List<Bitmap> bitmapList = new ArrayList<>();
+    private ImageAdapter imageAdapter;
 
-    // initialize array of smallImages (100x75 thumbnails)
-    Integer[] smallImages = { R.drawable.pic01_small,
-            R.drawable.pic02_small, R.drawable.pic03_small,
-            R.drawable.pic04_small, R.drawable.pic05_small,
-            R.drawable.pic06_small, R.drawable.pic07_small,
-            R.drawable.pic08_small, R.drawable.pic09_small,
-            R.drawable.pic10_small, R.drawable.homedec_5,
-            R.drawable.homedec_4, R.drawable.homedec_3,
-            R.drawable.homedec_2, R.drawable.homedec_1 };
+    private Context context;
+    private ArrayList<Bitmap> list;
 
-    //initialize array of high-resolution images (1024x768)
-    /*Integer[] largeImages = { R.drawable.pic01_large,
-            R.drawable.pic02_large, R.drawable.pic03_large,
-            R.drawable.pic04_large, R.drawable.pic05_large,
-            R.drawable.pic06_large, R.drawable.pic07_large,
-            R.drawable.pic08_large, R.drawable.pic09_large,
-            R.drawable.pic10_large, R.drawable.pic11_large,
-            R.drawable.pic12_large, R.drawable.pic13_large,
-            R.drawable.pic14_large, R.drawable.pic15_large };*/
+    public String selectBrand;
+    public String selectRoom;
+    public String selectStyle;
 
-    //in case you want to use-save state values
-    Bundle myOriginalMemoryBundle;
+    // create Firebase
+    FirebaseDatabase firebaseDatabase;
+    FirebaseStorage storage;
+    StorageReference storageRef;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.activity_page_gallery, container, false);
+        context = this.getActivity().getApplicationContext();
+
+        // initialize database and storage
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReferenceFromUrl("gs://intense-inferno-3371.appspot.com");
 
         // part1: three spinners
         Spinner spinner1 = (Spinner) rootView.findViewById(R.id.spinner1);
@@ -84,30 +93,34 @@ public class Page_Gallery extends Fragment implements AdapterView.OnItemSelected
 
 
         // part2: GridView for images
-        myOriginalMemoryBundle = savedInstanceState;
+        list = new ArrayList<>();
+        imageAdapter = new ImageAdapter(context, bitmapList);
         gridview = (GridView) rootView.findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageAdapter(this.getActivity(), smallImages));
         gridview.setOnItemClickListener(this);
+        gridview.setAdapter(imageAdapter);
 
         return rootView;
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String s = "";
         switch (parent.getId()) {
             case R.id.spinner1:
-                selections[0] = brands[position] == "brand" ? "" : brands[position];
+                selectBrand = brands[position];
                 break;
             case R.id.spinner2:
-                selections[1] = rooms[position] == "room" ? "" : rooms[position];
+                selectRoom = rooms[position];
                 break;
             case R.id.spinner3:
-                selections[2] = styles[position] == "style" ? "" : styles[position];
+                selectStyle = styles[position];
                 break;
         }
-        /*Toast.makeText(getActivity().getApplicationContext(),
-                selections[0] + " " + selections[1] + " " + selections[2] + " are selected!", Toast.LENGTH_SHORT).show();*/
+
+        // avoid execute three times when first launching this fragment
+        if (selectRoom != null && selectStyle != null && selectBrand != null) {
+            getGalleries();
+        }
+
     }
 
     @Override
@@ -117,26 +130,79 @@ public class Page_Gallery extends Fragment implements AdapterView.OnItemSelected
 
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-        // TODO: 5/26/16
-//        showBigScreen(position);
+        // TODO: 5/26/16 show solo picture
     }
 
-    private void showBigScreen(int position) {
-        // show the selected picture as a single frame
-        getActivity().setContentView(R.layout.solo_picture);
-//        soloPhoto = (ImageView) getView().findViewById(R.id.imgSoloPhoto);
-//
-//        soloPhoto.setImageResource( largeImages[position] );
-//
-//        btnBack = (Button) getView().findViewById(R.id.btnBack);
-//        btnBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // redraw the main screen showing the GridView
-//                onCreate(myOriginalMemoryBundle);
-//                //recreate();
-//            }
-//        });
+
+
+    public void getGalleries() {
+        Log.d("position", "in getGalleries()");
+        imageAdapter.clear();
+        DatabaseReference userRef = firebaseDatabase.getReference("GalleryList");
+
+        userRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+                Gallery gallery = snapshot.getValue(Gallery.class);
+
+                Boolean brandIsSelected = selectBrand == "Brand" ? false : true;
+                Boolean roomIsSelected = selectRoom == "Room" ? false : true;
+                Boolean styleIsSelected = selectStyle == "Style" ? false : true;
+
+                if ((!brandIsSelected || gallery.getBrand().equals(selectBrand))
+                        && (!roomIsSelected || gallery.getRoom().equals(selectRoom))
+                        && (!styleIsSelected || gallery.getStyle().equals(selectStyle))) {
+                    addBitmapToList(gallery.getImage());
+                } else {
+                    Log.d("position", "fail to add to list");
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+
+            public void addBitmapToList(String fileName) {
+                StorageReference fileRef = storageRef.child("galleries/" + fileName);
+
+                final long ONE_MEGABYTE = 1024 * 1024;
+                fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        // image return as byte[] and convert to bitmap
+                        Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        // dynamically add to adapter and shown in gridview
+                        imageAdapter.addBitmap(bm);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                        exception.printStackTrace();
+                        Log.d("error", "Failed to load image from Firebase storage!!!");
+                    }
+                });
+
+            }
+        });
 
     }
+
 }
