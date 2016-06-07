@@ -13,6 +13,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
@@ -254,6 +256,35 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.mainFragment, page)
                 .commit();
     }
+
+    private void openPageAddPeople() {
+        Bundle bundle = new Bundle();
+        AddPeopleFragment page = new AddPeopleFragment();
+        page.setArguments(bundle);
+        getFragmentManager().beginTransaction().replace(R.id.mainFragment,page).commit();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.homepage_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.menu_add_people:
+                openPageAddPeople();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+
 
 
     ///////////////////////// publish /////////////////////////
