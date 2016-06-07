@@ -15,7 +15,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.firebase.client.Firebase;
+//import com.firebase.client.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
@@ -32,21 +34,31 @@ public class MainActivity extends AppCompatActivity {
     public static BottomBar mBottomBar;
 
     // for publish
-    private String userChoosenTask;
     public static String imageFromCamera;
     public static Bitmap imageFromLibrary;
     public static Uri imageUri;
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // check user logged in or not
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            Intent intent = new Intent(MainActivity.this, SignIn.class);
+            startActivity(intent);
+        }
+
         // set bottom bar
         createButtomBar(savedInstanceState);
 
         // set Firebase
-        Firebase.setAndroidContext(this);
+//        Firebase.setAndroidContext(this);
+//        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+
 
 
     }
@@ -68,9 +80,9 @@ public class MainActivity extends AppCompatActivity {
             public void onMenuTabSelected(@IdRes int menuItemId) {
                 switch (menuItemId) {
                     case R.id.bb_homepage:
-                        //openPageHomepage();
-                        Intent intent = new Intent(MainActivity.this, SignIn.class);
-                        startActivity(intent);
+                        openPageHomepage();
+//                        Intent intent = new Intent(MainActivity.this, SignIn.class);
+//                        startActivity(intent);
                         break;
                     case R.id.bb_gallery:
                         openPageGallery();
@@ -164,11 +176,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int item) {
                 boolean permit = Utility.checkPermission(MainActivity.this);
                 if (items[item].equals("From Camera")) {
-                    userChoosenTask="From Camera";
+//                    userChoosenTask="From Camera";
                     if(permit)
                         fromCamera();    // call function below
                 } else if (items[item].equals("From Library")) {
-                    userChoosenTask="From Library";
+//                    userChoosenTask="From Library";
                     if(permit)
                         fromLibrary();   // call function below
                 } else if (items[item].equals("Cancel")) {

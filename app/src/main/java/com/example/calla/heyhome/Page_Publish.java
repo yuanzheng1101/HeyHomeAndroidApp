@@ -70,16 +70,21 @@ public class Page_Publish extends Fragment {
         buttom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // get time
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                // get image
+                String picString = imageToString();
 
                 // get caption
                 EditText tv = (EditText) getActivity().findViewById(R.id.caption);
                 String caption = tv.getText().toString();
 
-                // get image
-                String picString = imageToString();
-                Record record = new Record(89, caption, picString, timeStamp);
+                // get location
+                // TODO: 6/7/16
+                String location = "location";
+
+                // get time
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+                Record record = new Record(dbFirebase.getCurrentUid(), picString, caption, "null", location, timeStamp);
                 dbFirebase.addRecord(record);
 
                 // jump to homepage

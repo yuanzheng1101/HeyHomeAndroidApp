@@ -80,24 +80,15 @@ public class SignIn extends AppCompatActivity {
         });
 
 
-        Button button2 = (Button) findViewById(R.id.signOut);
+        Button button2 = (Button) findViewById(R.id.signUp);
         button2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Log.d("sign out", "successfully signed out!");
+                Intent intent = new Intent(SignIn.this, SignUp.class);
+                startActivity(intent);
             }
         });
 
-        Button button3 = (Button) findViewById(R.id.home);
-        button3.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SignIn.this, MainActivity.class);
-                startActivity(intent);
-                Log.d("back to main", "successfully turn to homepage!");
-            }
-        });
     }
 
     @Override
@@ -121,8 +112,6 @@ public class SignIn extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("sign in", "signInWithEmail:onComplete:" + task.isSuccessful());
-
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
@@ -130,26 +119,14 @@ public class SignIn extends AppCompatActivity {
                             Log.w("sign in", "signInWithEmail", task.getException());
                             Toast.makeText(SignIn.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.d("sign in", "signInWithEmail:onComplete:" + task.isSuccessful());
+                            Intent intent = new Intent(SignIn.this, MainActivity.class);
+                            startActivity(intent);
                         }
 
                         // ...
                     }
                 });
     }
-
-//    public void loadUserProfile(String uid) {
-//        System.out.println(uid);
-//        User user = dbFirebase.getUser(uid);
-//        name = user.getName();
-//        description = user.getDescription();
-//        followingCount = user.getFollowingCount();
-//        followerCount = user.getFollowerCount();
-//        followings = user.getFollowings();
-//        followers = user.getFollowers();
-//
-//        System.out.println(name);
-//        System.out.println(description);
-//        System.out.println(followingCount);
-//        System.out.println(followerCount);
-//    }
 }

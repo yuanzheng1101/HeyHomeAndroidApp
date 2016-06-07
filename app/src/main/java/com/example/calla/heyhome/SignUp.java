@@ -1,5 +1,6 @@
 package com.example.calla.heyhome;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,7 +16,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SignUp extends AppCompatActivity {
@@ -54,8 +54,9 @@ public class SignUp extends AppCompatActivity {
                     // User is signed in
                     Log.d("sign up", "onAuthStateChanged:signed_in:" + user.getUid());
                     uid = user.getUid();
-                    User userInfo = new User("new user", "", "", "", "", 0, 0);
-        dbFirebase.addUser(uid, userInfo);
+
+                    User userInfo = new User("new user", "", "", "", "", "favorite");
+                    dbFirebase.addUser(uid, userInfo);
                 } else {
                     // User is signed out
                     Log.d("sign up", "onAuthStateChanged:signed_out");
@@ -98,7 +99,6 @@ public class SignUp extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("SignUp", "createUserWithEmail:onComplete:" + task.isSuccessful());
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
@@ -106,6 +106,10 @@ public class SignUp extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             Toast.makeText(SignUp.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.d("SignUp", "createUserWithEmail:onComplete:" + task.isSuccessful());
+                            Intent intent = new Intent(SignUp.this, MainActivity.class);
+                            startActivity(intent);
                         }
                     }
                 });

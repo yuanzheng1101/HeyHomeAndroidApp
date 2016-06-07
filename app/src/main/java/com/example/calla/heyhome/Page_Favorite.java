@@ -1,12 +1,14 @@
 package com.example.calla.heyhome;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,7 +49,6 @@ public class Page_Favorite extends Fragment {
         // create Firebase
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-
         dbFirebase = new DBFirebase();
 
 
@@ -58,13 +60,9 @@ public class Page_Favorite extends Fragment {
 //                User user2 = new User("Green", "greenpass", "green@scu", "ggggg", "greenImage", 4, 5);
 //                dbFirebase.addUser(user1);
 //                dbFirebase.addUser(user2);
-//
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                Gallery gallery = new Gallery("Ethan Allen", "Dining", "Transitional", "ea11.jpg", timeStamp);
-                dbFirebase.addGallery(gallery);
+                dbFirebase.getUser(dbFirebase.getCurrentUid());
 
-//                Record record = new Record(101, "caption", "image", "time");
-//                dbFirebase.addRecord(record);
+
             }
         });
 
@@ -72,8 +70,34 @@ public class Page_Favorite extends Fragment {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = "kate";
+
+
+                String name = "radio";
                 dbFirebase.searchUser(name);
+
+                // add favorite
+//                Favorite favorite = new Favorite("image05.jpg");
+//                DatabaseReference userRef = firebaseDatabase.getReference("UserList");
+//                userRef.child(dbFirebase.getCurrentUid()).child("favorites").push().setValue(favorite);
+
+                // add comment
+                String rid = "-KJfqdlHgzcNZQWlGnQ7";
+                Comment comment = new Comment(dbFirebase.getCurrentUid(), "excellent!");
+                DatabaseReference recordRef = firebaseDatabase.getReference("RecordList");
+                recordRef.child(rid).child("comments").push().setValue(comment);
+
+            }
+        });
+
+
+        Button button3 = (Button) rootView.findViewById(R.id.button3);
+        button3.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Log.d("sign out", "successfully signed out!");
+                Intent intent = new Intent(getActivity(), SignIn.class);
+                startActivity(intent);
             }
         });
 

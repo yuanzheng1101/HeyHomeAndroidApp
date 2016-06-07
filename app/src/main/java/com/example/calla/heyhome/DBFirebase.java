@@ -33,15 +33,14 @@ public class DBFirebase {
     // create Firebase
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
+    // create auth
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
     // instantiate session
 //    SessionManager sessionManager = new SessionManager();
 
     public DBFirebase() {
 
-    }
-
-    public void addGallery(Gallery gallery) {
-        firebaseDatabase.getReference("GalleryList").push().setValue(gallery);
     }
 
     public void addRecord(Record record) {
@@ -59,15 +58,19 @@ public class DBFirebase {
     }
 
     public void getUser(String uid) {
+        Log.d("position", "in getUser");
+        Log.d("position", uid);
         DatabaseReference userRef = firebaseDatabase.getReference("UserList");
 
-        Query query = userRef.orderByKey().equalTo(uid);
-        query.addChildEventListener(new ChildEventListener() {
+        Query query = userRef.orderByChild("name").equalTo("radio");
+        userRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+                Log.d("position", "in getUser - onChildAdded");
                 System.out.println(snapshot.getKey());
                 System.out.println(snapshot.getValue());
                 User user = snapshot.getValue(User.class);
+
 
                 // store uid into seesion
 //                sessionManager.createLoginSession(user);
@@ -132,6 +135,10 @@ public class DBFirebase {
             }
 
         });
+    }
+
+    public String getCurrentUid() {
+        return mAuth.getCurrentUser().getUid();
     }
 
 

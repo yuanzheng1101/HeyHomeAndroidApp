@@ -8,28 +8,31 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Calla on 5/26/16.
  */
 public class ImageAdapter extends BaseAdapter{
 
-    private Context context;	// calling activity context
-    Bitmap[] smallImages;		// thumbnail data set
-//    Integer[] smallImages;
+    private Context context;
+    private List<Bitmap> smallImages;
 
-    public ImageAdapter(Context callingActivityContext, Bitmap[] thumbnails) {
+    public ImageAdapter(Context callingActivityContext, List<Bitmap> thumbnails) {
         context = callingActivityContext;
-        smallImages = thumbnails;
+        smallImages = new ArrayList<>();
+        smallImages.addAll(thumbnails);
     }
 
     // how many entries are there in the data set
     public int getCount() {
-        return smallImages.length;
+        return smallImages.size();
     }
 
     // what is in a given 'position' in the data set
     public Object getItem(int position) {
-        return smallImages[position];
+        return smallImages.get(position);
     }
 
     // what is the ID of data item in given 'position'
@@ -53,10 +56,21 @@ public class ImageAdapter extends BaseAdapter{
         } else {
             imageView = (SquareImageView) convertView;
         }
-        imageView.setImageBitmap(smallImages[position]);
-//        imageView.setImageResource(smallImages[position]);
-//        System.out.println("position bm: " + smallImages[position].toString().length());
+        imageView.setImageBitmap(smallImages.get(position));
+
         return imageView;
+    }
+
+    public void addBitmap(Bitmap bitmap) {
+        smallImages.add(bitmap);
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        for (int i = 0; i < smallImages.size(); i++) {
+            smallImages.get(i).recycle();
+        }
+        smallImages.clear();
     }
 
     public class SquareImageView extends ImageView {
@@ -68,5 +82,4 @@ public class ImageAdapter extends BaseAdapter{
             super.onMeasure(width, width);
         }
     }
-
 }

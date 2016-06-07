@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,13 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.BooleanResult;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -27,8 +23,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -38,36 +32,20 @@ import java.util.List;
 
 public class Page_Gallery extends Fragment implements AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
 
-    String[] brands = {"Brand", "Bassett", "RH", "Crate & Barrel", "Ethan Allen", "IKEA", "Pottery Barn", "West elm"};
-    String[] rooms = {"Room", "Living", "Bedroom", "Kitchen", "Dining", "Bath"};
-    String[] styles = {"Style", "Contemporary", "Modern", "Transitional", "Traditional", "Farmhouse", "Rustic"};
-    String[] selections = new String[3];
+    private static String[] brands = {"Brand", "Bassett", "Ethan Allen", "IKEA", "Pottery Barn"};
+    private static String[] rooms = {"Room", "Living", "Bedroom", "Kitchen", "Dining", "Bathroom"};
+    private static String[] styles = {"Style", "Contemporary", "Transitional", "Traditional"};
 
-    GridView gridview;
-    ImageView soloPhoto;
-    Button btnBack;
+    private GridView gridview;
+    private final List<Bitmap> bitmapList = new ArrayList<>();
+    private ImageAdapter imageAdapter;
 
-    Context context;
-    ArrayList<Bitmap> list;
+    private Context context;
+    private ArrayList<Bitmap> list;
 
     public String selectBrand;
     public String selectRoom;
     public String selectStyle;
-
-    // initialize array of smallImages (100x75 thumbnails)
-    Integer[] smallImages = { R.drawable.pic01_small,
-            R.drawable.pic02_small, R.drawable.pic03_small,
-            R.drawable.pic04_small, R.drawable.pic05_small,
-            R.drawable.pic06_small, R.drawable.pic07_small,
-            R.drawable.pic08_small, R.drawable.pic09_small,
-            R.drawable.pic10_small, R.drawable.homedec_5,
-            R.drawable.homedec_4, R.drawable.homedec_3,
-            R.drawable.homedec_2, R.drawable.homedec_1 };
-
-    List<Bitmap> bitmaps = new ArrayList<>();
-
-    //in case you want to use-save state values
-    Bundle myOriginalMemoryBundle;
 
     // create Firebase
     FirebaseDatabase firebaseDatabase;
@@ -79,7 +57,6 @@ public class Page_Gallery extends Fragment implements AdapterView.OnItemSelected
 
         View rootView = inflater.inflate(R.layout.activity_page_gallery, container, false);
         context = this.getActivity().getApplicationContext();
-        list = new ArrayList<>();
 
         // initialize database and storage
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -116,10 +93,11 @@ public class Page_Gallery extends Fragment implements AdapterView.OnItemSelected
 
 
         // part2: GridView for images
-        myOriginalMemoryBundle = savedInstanceState;
+        list = new ArrayList<>();
+        imageAdapter = new ImageAdapter(context, bitmapList);
         gridview = (GridView) rootView.findViewById(R.id.gridview);
         gridview.setOnItemClickListener(this);
-//        getGalleries("");
+        gridview.setAdapter(imageAdapter);
 
         return rootView;
     }
@@ -128,23 +106,21 @@ public class Page_Gallery extends Fragment implements AdapterView.OnItemSelected
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.spinner1:
-                selections[0] = brands[position];
                 selectBrand = brands[position];
                 break;
             case R.id.spinner2:
-                selections[1] = rooms[position];
                 selectRoom = rooms[position];
                 break;
             case R.id.spinner3:
-                selections[2] = styles[position];
                 selectStyle = styles[position];
                 break;
         }
-        Toast.makeText(getActivity().getApplicationContext(),
-                selectBrand + " " + selectRoom + " " + selectStyle + " are selected!", Toast.LENGTH_SHORT).show();
 
-        getGalleries();
-//        getGalleries("Brand", "Room", "Style");
+        // avoid execute three times when first launching this fragment
+        if (selectRoom != null && selectStyle != null && selectBrand != null) {
+            getGalleries();
+        }
+
     }
 
     @Override
@@ -160,42 +136,26 @@ public class Page_Gallery extends Fragment implements AdapterView.OnItemSelected
 
 
     public void getGalleries() {
-        Log.d("here", "in getGalleries()");
+        Log.d("position", "in getGalleries()");
+        imageAdapter.clear();
         DatabaseReference userRef = firebaseDatabase.getReference("GalleryList");
 
-        ChildEventListener listener = new ChildEventListener() {
-            List<Bitmap> list = new ArrayList<>();
-
-            int i = 0;
+        userRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChild) {
-                Log.d("here", "in onChildAdded()");
-//                String key = snapshot.getKey();
                 Gallery gallery = snapshot.getValue(Gallery.class);
 
                 Boolean brandIsSelected = selectBrand == "Brand" ? false : true;
                 Boolean roomIsSelected = selectRoom == "Room" ? false : true;
                 Boolean styleIsSelected = selectStyle == "Style" ? false : true;
 
-//                Log.d("parameter", "" + selectBrand + "-" + selectRoom + "-" + selectStyle);
-//                Log.d("parameter", "" + brandIsSelected + "-" + roomIsSelected + "-" + styleIsSelected);
-//                Log.d("parameter", "" + gallery.getBrand() + "-" + gallery.getRoom() + "-" + gallery.getStyle());
-//                System.out.println(!brandIsSelected);
-//                System.out.println(gallery.getBrand().equals(selectBrand));
-
                 if ((!brandIsSelected || gallery.getBrand().equals(selectBrand))
                         && (!roomIsSelected || gallery.getRoom().equals(selectRoom))
                         && (!styleIsSelected || gallery.getStyle().equals(selectStyle))) {
-                    addBitmapToList(gallery.image);
-                    Log.d("addToList Number: ", "" + i);
-                    i++;
+                    addBitmapToList(gallery.getImage());
                 } else {
-                    Log.d("here", "fail to add to list");
+                    Log.d("position", "fail to add to list");
                 }
-
-//                if (brandIsSelected != null) {
-//
-//                }
             }
 
             @Override
@@ -219,63 +179,30 @@ public class Page_Gallery extends Fragment implements AdapterView.OnItemSelected
             }
 
 
-            public void addBitmapToList(String fileNmae) {
-                String s = "galleries/" + fileNmae;
-                StorageReference fileRef = storageRef.child(s);
+            public void addBitmapToList(String fileName) {
+                StorageReference fileRef = storageRef.child("galleries/" + fileName);
 
                 final long ONE_MEGABYTE = 1024 * 1024;
                 fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
-                        // image return as byte[]
+                        // image return as byte[] and convert to bitmap
                         Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        list.add(bm);
-                        gridview.setAdapter(new ImageAdapter(context, list.toArray(new Bitmap[list.size()])));
+                        // dynamically add to adapter and shown in gridview
+                        imageAdapter.addBitmap(bm);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
                         // Handle any errors
                         exception.printStackTrace();
-                        System.out.println("Failed to load image from Firebase storage!!!");
+                        Log.d("error", "Failed to load image from Firebase storage!!!");
                     }
                 });
 
-                Bitmap[] bitmaps = list.toArray(new Bitmap[list.size()]);
-//                System.out.println(bitmaps.toString());
-//                gridview.setAdapter(new ImageAdapter(context, bitmaps));
             }
-        };
+        });
 
-
-        userRef.addChildEventListener(listener);
-
-//            ValueEventListener postListener = new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    // Get Post object and use the values to update the UI
-//                    for (DataSnapshot movieSnapshot : dataSnapshot.getChildren()) {
-//
-//                        if (movieSnapshot.get.equals('Jack Nicholson')) {
-//                            console.log(movieSnapshot.getKey());
-//                        }
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//                    // Getting Post failed, log a message
-//                    Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-//                    // ...
-//                }
-//            };
-//            mPostReference.addValueEventListener(postListener);
-
-
-//        userRef.addChildEventListener(listener);
-
-//        Query query = userRef.orderByChild("room").equalTo(s);
-//        query.addChildEventListener(listener);
     }
 
 }

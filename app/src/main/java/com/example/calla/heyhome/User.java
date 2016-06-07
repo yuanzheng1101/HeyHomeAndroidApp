@@ -7,22 +7,20 @@ import java.util.List;
  */
 public class User {
 
-    String name;
-    String description;
-    String photo;
-    String followings;
-    String followers;
-    int followingCount;
-    int followerCount;
+    private String name;
+    private String description;
+    private String photo;
+    private String followings;
+    private String followers;
+    private String favorites;
 
-    public User(String name, String description, String photo, String followings, String followers, int followingCount, int followerCount) {
+    public User(String name, String description, String photo, String followings, String followers, String favorites) {
         this.name = name;
         this.description = description;
         this.photo = photo;
         this.followings = followings;
         this.followers = followers;
-        this.followingCount = followingCount;
-        this.followerCount = followerCount;
+        this.favorites = favorites;
     }
 
     public User() {
@@ -41,19 +39,15 @@ public class User {
         return photo;
     }
 
-    public int getFollowingCount() {
-        return followingCount;
-    }
-
-    public int getFollowerCount() {
-        return followerCount;
-    }
-
     public String getFollowings() {
         return followings;
     }
 
     public String getFollowers() {
         return followers;
+    }
+
+    public String getFavorite() {
+        return favorites;
     }
 }

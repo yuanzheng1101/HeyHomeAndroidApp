@@ -5,18 +5,17 @@ package com.example.calla.heyhome;
  */
 public class Gallery {
 
-    String brand;
-    String room;
-    String style;
-    String image;
-    String time;
+    private String brand;
+    private String room;
+    private String style;
+    private String image;
 
-    public Gallery(String brand, String room, String style, String image, String time) {
+
+    public Gallery(String brand, String room, String style, String image) {
         this.brand = brand;
         this.room = room;
         this.style = style;
         this.image = image;
-        this.time = time;
     }
 
     public Gallery() {
@@ -33,5 +32,9 @@ public class Gallery {
 
     public String getStyle() {
         return style;
+    }
+
+    public String getImage() {
+        return image;
     }
 }
