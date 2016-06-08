@@ -104,45 +104,24 @@ public class Page_Me extends Fragment {
 
     // calla: for load data from db
     public void showRecords() {
-
         recordAdapter.clear();
-        DatabaseReference userRef = firebaseDatabase.getReference("RecordList");
+        DatabaseReference recordRef = firebaseDatabase.getReference("RecordList");
 
-        Log.d("position", "in showRecords()");
-
-        userRef.addChildEventListener(new ChildEventListener() {
+        recordRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChild) {
-                Log.d("position", "in onChildAdded()");
-
                 Record record = snapshot.getValue(Record.class);
 
-                String uid = "Dh3yqkxgcPTtirb5VMyajBQvQwA3";
+                String uid = "FIfBOs96HHhmITijarvjx5MDGnI2";
+                if (record.getUserId().equals(uid)) {
 
-                if (record.getUser().equals(uid)) {
-                    System.out.println(record.getImage().length());
-
-                    userID.delete(0, userID.length());
-                    userID.append(record.getUser());
-
-                    userName.delete(0, userName.length());
-                    userPhoto.delete(0, userPhoto.length());
-                    recordCaption.delete(0, recordCaption.length());
-                    recordImage.delete(0, recordImage.length());
-                    recordLocation.delete(0, recordLocation.length());
-                    recordTime.delete(0, recordTime.length());
-
-                    getUserInfo();
-
-                    System.out.println(userName.toString() + "here!!!!!");
-
-                    CardInfo card = new CardInfo(userPhoto.toString(), userName.toString(), record.getLocation(),
-                            record.getCaption(), record.getImage(), false, record.getTime());
+                    CardInfo card = new CardInfo(record.getUserImage(), record.getUserName(), record.getLocation(),
+                            record.getCaption(), record.getImage(), false, record.getTime(), snapshot.getKey());
 
                     recordAdapter.addCardInfo(card);
 
                 } else {
-                    Log.d("position", "fail to add to list");
+                    Log.d("position", "wrong record");
                 }
             }
 
@@ -164,62 +143,6 @@ public class Page_Me extends Fragment {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
-            }
-
-            public void getUserInfo() {
-                Log.d("position", "in getUserInfo()");
-                DatabaseReference userRef = firebaseDatabase.getReference("UserList");
-                System.out.println(userID.toString());
-                Query query = userRef.orderByKey().equalTo(userID.toString());
-
-                query.addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot snapshot, String previousChild) {
-                        String uid = userID.toString();
-                        if (snapshot.getKey().equals(uid)) {
-                            User user = snapshot.getValue(User.class);
-
-                            userName.append(user.getName());
-                            userPhoto.append(user.getPhoto());
-
-                            CardInfo card = new CardInfo(userPhoto.toString(), userName.toString(), recordLocation.toString(),
-                                    recordCaption.toString(), recordImage.toString(), false, recordTime.toString());
-                            recordAdapter.addCardInfo(card);
-
-                            userName.delete(0, userName.length());
-                            userPhoto.delete(0, userPhoto.length());
-
-
-                            System.out.println("getUserInfo: " + user.getName());
-                            System.out.println("getUserInfo: " + user.getPhoto().length());
-
-
-                        } else {
-                            Log.d("position", "wrong user");
-                        }
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot snapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-
-                });
             }
 
 
