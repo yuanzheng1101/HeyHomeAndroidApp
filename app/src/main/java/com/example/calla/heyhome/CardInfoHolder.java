@@ -15,13 +15,14 @@ public class CardInfoHolder {
     }
 
     private String userPostedCaption;
-    protected String userPostedPhoto; // R.id.photo todo need change this to string
+    protected String userPostedPhoto;
     protected String userProfileImgPath;
     protected String userName;
     protected String location;
     protected boolean favIcon;
     protected String userPostedTime;
     protected String recordId;
+    protected String userId;
 
 
 
@@ -49,6 +50,9 @@ public class CardInfoHolder {
     public void setRecordId (String recordId) {
         this.recordId = recordId;
     }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
 
 
@@ -75,5 +79,8 @@ public class CardInfoHolder {
     }
     public String getRecordId() {
         return recordId;
+    }
+    public String getUserId() {
+        return userId;
     }
 }

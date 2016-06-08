@@ -10,14 +10,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,10 +70,17 @@ public class Page_Homepage extends Fragment implements AdapterView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         CardInfo oneCard = cardInfo.get(position);
-        Toast.makeText(getActivity(), "clicked : " + oneCard.getUserPostedCaption(), Toast.LENGTH_SHORT).show();
         CardInfoHolder cardInfoHolder = CardInfoHolder.getInstance();
         cardInfoHolder.setCaption(oneCard.getUserPostedCaption());
         cardInfoHolder.setPhoto(oneCard.getUserPostedPhoto());
+        cardInfoHolder.setUserProfileImgPath(oneCard.getUserProfileImgPath());
+        cardInfoHolder.setUserName(oneCard.getUserName());
+        cardInfoHolder.setLocation(oneCard.getLocation());
+        cardInfoHolder.setFavIcon(oneCard.getFavIcon());
+        cardInfoHolder.setUserPostedTime(oneCard.getUserPostedTime());
+        cardInfoHolder.setRecordId(oneCard.getRecordId());
+        cardInfoHolder.setUserId(oneCard.getUserId());
+
         openPageViewPhoto();
     }
 
@@ -98,6 +103,7 @@ public class Page_Homepage extends Fragment implements AdapterView.OnItemClickLi
     }
 
 
+
     public void showRecords() {
         recordAdapter.clear();
         DatabaseReference recordRef = firebaseDatabase.getReference("RecordList");
@@ -107,11 +113,10 @@ public class Page_Homepage extends Fragment implements AdapterView.OnItemClickLi
             public void onChildAdded(DataSnapshot snapshot, String previousChild) {
                 Record record = snapshot.getValue(Record.class);
 
-//                String uid = "FIfBOs96HHhmITijarvjx5MDGnI2";
                 if (followings.contains(record.getUserId())) {
 
                     CardInfo card = new CardInfo(record.getUserImage(), record.getUserName(), record.getLocation(),
-                            record.getCaption(), record.getImage(), false, record.getTime(), snapshot.getKey());
+                            record.getCaption(), record.getImage(), false, record.getTime(), snapshot.getKey(), record.getUserId());
 
                     recordAdapter.addCardInfo(card);
 

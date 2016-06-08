@@ -15,7 +15,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +35,8 @@ public class Page_Me extends Fragment {
     private final StringBuilder recordTime = new StringBuilder();
     private final StringBuilder userPhoto = new StringBuilder();
 
+    private SessionManager sessionManager;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,7 +44,10 @@ public class Page_Me extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_page_me, container, false);
         //show the whole page here
 
-        //initialize firebase
+        // initialize session
+        sessionManager = new SessionManager(getActivity().getApplicationContext());
+
+        // initialize firebase
         firebaseDatabase = FirebaseDatabase.getInstance();
         ImageView addPeople = (ImageView) rootView.findViewById(R.id.menu_add_people);
         addPeople.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +57,7 @@ public class Page_Me extends Fragment {
             }
         });
         final TextView followingOrEdit = (TextView) rootView.findViewById(R.id.edit_profile);
-        if (userID.toString().equals("11111")) { // todo if it's current user
+        if (userID.toString().equals(sessionManager.getCurrentUserId())) {
             followingOrEdit.setText("Edit page");
         } else {
             if (false) { // todo if not follow
@@ -102,7 +106,6 @@ public class Page_Me extends Fragment {
     }
 
 
-    // calla: for load data from db
     public void showRecords() {
         recordAdapter.clear();
         DatabaseReference recordRef = firebaseDatabase.getReference("RecordList");
@@ -116,7 +119,7 @@ public class Page_Me extends Fragment {
                 if (record.getUserId().equals(uid)) {
 
                     CardInfo card = new CardInfo(record.getUserImage(), record.getUserName(), record.getLocation(),
-                            record.getCaption(), record.getImage(), false, record.getTime(), snapshot.getKey());
+                            record.getCaption(), record.getImage(), false, record.getTime(), snapshot.getKey(), record.getUserId());
 
                     recordAdapter.addCardInfo(card);
 
