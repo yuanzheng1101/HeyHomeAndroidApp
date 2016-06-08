@@ -8,25 +8,27 @@ import java.util.Map;
  */
 public class Record {
 
-    private String user;
+    private String rid;
     private String image;
     private String caption;
     private String location;
     private String time;
+    private String userId;
+    private String userName;
+    private String userImage;
 
-    public Record (String user, String image, String caption, String location, String time) {
-        this.user = user;
+    public Record (String rid, String image, String caption, String location, String time, String userId, String userName, String userImage) {
+        this.rid = rid;
         this.image = image;
         this.caption = caption;
         this.location = location;
         this.time = time;
+        this.userId = userId;
+        this.userName = userName;
+        this.userImage = userImage;
     }
 
     public Record(){};
-
-    public String getUser() {
-        return user;
-    }
 
     public String getImage() {
         return image;
@@ -44,5 +46,15 @@ public class Record {
         return time;
     }
 
+    public String getUserId() {
+        return userId;
+    }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getUserImage() {
+        return userImage;
+    }
 }

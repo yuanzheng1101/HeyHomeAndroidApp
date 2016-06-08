@@ -1,5 +1,6 @@
 package com.example.calla.heyhome;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ImageView;
@@ -37,11 +38,13 @@ public class DBFirebase {
     // create auth
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
+    Context context;
+
     // instantiate session
 //    SessionManager sessionManager = new SessionManager();
 
-    public DBFirebase() {
-
+    public DBFirebase(Context context) {
+        this.context = context;
     }
 
     public void initializeComment(String rid) {
@@ -147,12 +150,43 @@ public class DBFirebase {
         });
     }
 
-    public String getCurrentUid() {
-        return mAuth.getCurrentUser().getUid();
-    }
+    public void getCurrentUserInfo() {
+        if (mAuth.getCurrentUser() != null) {
+            String currentUid = mAuth.getCurrentUser().getUid();
 
-    public void uploadProfileImage() {
-        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+            DatabaseReference userRef = firebaseDatabase.getReference("UserList");
+            Query query = userRef.orderByKey().equalTo(currentUid);
+            query.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+                    User user = snapshot.getValue(User.class);
+
+                    SessionManager sessionManager = new SessionManager(context);
+                    sessionManager.createSignInSession(mAuth.getCurrentUser().getUid(), user.getName(), user.getPhoto());
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot snapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+
+            });
+        }
 
     }
 

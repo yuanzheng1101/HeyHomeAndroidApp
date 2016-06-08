@@ -2,6 +2,7 @@ package com.example.calla.heyhome;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public static Uri imageUri;
 
     private FirebaseAuth mAuth;
+    private DBFirebase dbFirebase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
         // set bottom bar
         createButtomBar(savedInstanceState);
 
+        // manage session
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        SharedPreferences.Editor editor = pref.edit();
+
+//        dbFirebase.getCurrentUserInfo();
         // set Firebase
 //        Firebase.setAndroidContext(this);
 //        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -104,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Setting colors for different tabs when there's more than three of them.
         // You can set colors for tabs in three different ways as shown below.
+
         mBottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.pink_0));
         mBottomBar.mapColorForTab(1, ContextCompat.getColor(this, R.color.pink_1));
         mBottomBar.mapColorForTab(2, ContextCompat.getColor(this, R.color.pink_2));

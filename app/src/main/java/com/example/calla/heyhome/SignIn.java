@@ -45,7 +45,7 @@ public class SignIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        dbFirebase = new DBFirebase();
+        dbFirebase = new DBFirebase(getApplicationContext());
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -56,6 +56,7 @@ public class SignIn extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     Log.d("login", "onAuthStateChanged:signed_in:" + user.getUid());
+                    dbFirebase.getCurrentUserInfo();
                 } else {
                     // User is signed out
                     Log.d("login", "onAuthStateChanged:signed_out");

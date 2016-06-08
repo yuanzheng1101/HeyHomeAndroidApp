@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -30,6 +31,7 @@ import java.util.Map;
 
 public class Page_Publish extends Fragment {
     private DBFirebase dbFirebase;
+    SessionManager sessionManager;
 
     ImageView imageView;
     EditText caption;
@@ -39,7 +41,11 @@ public class Page_Publish extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_page_publish, container, false);
 
         // instantiate databse
-        dbFirebase = new DBFirebase();
+        dbFirebase = new DBFirebase(getActivity().getApplicationContext());
+
+        // instantiate session
+        sessionManager = new SessionManager(getActivity().getApplicationContext());
+
 
         // instantiate components
         imageView = (ImageView) rootView.findViewById(R.id.image);
@@ -85,7 +91,9 @@ public class Page_Publish extends Fragment {
                 // get time
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
-                Record record = new Record(dbFirebase.getCurrentUid(), picString, caption, location, timeStamp);
+
+                Record record = new Record("", picString, caption, location, timeStamp,
+                        sessionManager.getCurrentUserId(), sessionManager.getCurrentUserName(), sessionManager.getCurrentUserImage());
                 dbFirebase.addRecord(record);
 
 

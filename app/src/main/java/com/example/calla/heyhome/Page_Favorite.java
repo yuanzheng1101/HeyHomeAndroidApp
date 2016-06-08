@@ -29,10 +29,13 @@ import com.google.firebase.storage.StorageReference;
 
 
 public class Page_Favorite extends Fragment {
+
     private DBFirebase dbFirebase;
-    ImageView image;
     FirebaseDatabase firebaseDatabase;
 
+    SessionManager sessionManager;
+
+    ImageView image;
     TextView tv;
 
     @Override
@@ -49,10 +52,12 @@ public class Page_Favorite extends Fragment {
         });
         //show the whole page here
 
-        // create Firebase
+        // instantiate Firebase
         firebaseDatabase = FirebaseDatabase.getInstance();
+        dbFirebase = new DBFirebase(getActivity().getApplicationContext());
 
-        dbFirebase = new DBFirebase();
+        // instantiate session
+        sessionManager = new SessionManager(getActivity().getApplicationContext());
 
 
         Button button = (Button) rootView.findViewById(R.id.button1);
@@ -63,8 +68,11 @@ public class Page_Favorite extends Fragment {
 //                User user2 = new User("Green", "greenpass", "green@scu", "ggggg", "greenImage", 4, 5);
 //                dbFirebase.addUser(user1);
 //                dbFirebase.addUser(user2);
-                dbFirebase.getUser(dbFirebase.getCurrentUid());
+//                dbFirebase.getUser(dbFirebase.getCurrentUid());
 
+                SessionManager sessionManager = new SessionManager(getActivity().getApplicationContext());
+                String name = sessionManager.getCurrentUserName();
+                System.out.println("I found user name from session! " + name);
 
             }
         });
@@ -85,7 +93,7 @@ public class Page_Favorite extends Fragment {
 
                 // add comment
                 String rid = "-KJfqpyIzZmjLyfLvww0";
-                Comment comment = new Comment(rid, dbFirebase.getCurrentUid(), "good!");
+                Comment comment = new Comment(rid, sessionManager.getCurrentUserName(), sessionManager.getCurrentUserImage(), "good!");
                 DatabaseReference commentRef = firebaseDatabase.getReference("CommentList");
                 commentRef.push().setValue(comment);
 
@@ -98,6 +106,8 @@ public class Page_Favorite extends Fragment {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
+                SessionManager sessionManager = new SessionManager(getActivity().getApplicationContext());
+                sessionManager.clearSessionForSignOut();
                 Log.d("sign out", "successfully signed out!");
                 Intent intent = new Intent(getActivity(), SignIn.class);
                 startActivity(intent);
@@ -112,22 +122,22 @@ public class Page_Favorite extends Fragment {
 
 
         image = (ImageView) rootView.findViewById(R.id.imageView);
-        final long ONE_MEGABYTE = 1024 * 1024;
-        fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                // Data for "images/image1.png" is returns, use this as needed
-                Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                image.setImageBitmap(bm);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-                exception.printStackTrace();
-                System.out.println("Failed to load image from Firebase storage!!!");
-            }
-        });
+//        final long ONE_MEGABYTE = 1024 * 1024;
+//        fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//            @Override
+//            public void onSuccess(byte[] bytes) {
+//                // Data for "images/image1.png" is returns, use this as needed
+//                Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//                image.setImageBitmap(bm);
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Handle any errors
+//                exception.printStackTrace();
+//                System.out.println("Failed to load image from Firebase storage!!!");
+//            }
+//        });
 
 
         return rootView;
