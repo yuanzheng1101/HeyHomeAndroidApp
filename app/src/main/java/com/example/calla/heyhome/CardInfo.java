@@ -10,8 +10,15 @@ public class CardInfo {
     protected String location;
     protected String userPostedCaption;
     protected String userPostedPhoto; // R.id.photo todo need change this to string
+    protected int intUserPostedPhoto;
     protected boolean favIcon;
     protected String userPostedTime;
+
+    public CardInfo(int userPostedPhoto, String userPostedCaption) {
+        this.intUserPostedPhoto = userPostedPhoto;
+        this.userPostedCaption = userPostedCaption;
+
+    }
 
     public CardInfo(String userPostedPhoto, String userPostedCaption) {
         this.userPostedPhoto = userPostedPhoto;

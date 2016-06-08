@@ -5,4 +5,9 @@
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFF</color>
     <color name="light_coral">#F06060</color>
+    <color name="pink_0">#FAA275</color>
+    <color name="pink_1">#FF8C61</color>
+    <color name="pink_2">#CE6A85</color>
+    <color name="pink_3">#985277</color>
+    <color name="pink_4">#5C374C</color>
 </resources>
