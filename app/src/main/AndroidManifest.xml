@@ -34,7 +34,7 @@
         <!-- <activity android:name=".Page_Publish" /> -->
         <!-- <activity android:name=".Page_Favorite" /> -->
         <!-- <activity android:name=".Page_Me" /> -->
-        <activity android:name=".ViewPhoto" />
+        <activity android:name=".ViewMapActivity" />
         <activity android:name=".SignIn" />
         <activity android:name=".SignUp"></activity>
     </application>

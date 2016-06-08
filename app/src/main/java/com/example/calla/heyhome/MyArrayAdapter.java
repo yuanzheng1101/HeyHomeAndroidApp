@@ -5,7 +5,6 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,7 +82,17 @@ public class MyArrayAdapter extends ArrayAdapter<CardInfo> {
         holder.vLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openViewMapPage();
+                LLHolder llHolder = LLHolder.getInstance();
+                // todo change getLocation() to getLatitude;
+                llHolder.setLatitude(cardInfo.get(position).getLocation());
+                llHolder.setLongitude(cardInfo.get(position).getLocation());
+                context.startActivity(new Intent(context, ViewMapActivity.class));
+
+
+//                Intent intent = new Intent(getActivity(), ViewMapActivity.class);
+//                intent.putExtra("latitude", latitude);
+//                intent.putExtra("longitude", longitude);
+//                context.startActivity(intent);
             }
         });
 
@@ -133,15 +142,6 @@ public class MyArrayAdapter extends ArrayAdapter<CardInfo> {
         });
 
         return row;
-    }
-
-    private void openViewMapPage() {
-        Bundle bundle = new Bundle();
-        ViewMapFragment page = new ViewMapFragment();
-        page.setArguments(bundle);
-        fm.beginTransaction()
-                .replace(R.id.mainFragment, page)
-                .commit();
     }
 
     public class ScrapViewHolder {
