@@ -18,7 +18,8 @@ public class ViewPhotoFragment extends Fragment {
         CardInfoHolder cardInfoHolder = CardInfoHolder.getInstance();
 
         String caption = cardInfoHolder.getCaption();
-        int photo = cardInfoHolder.getPhoto();
+//        int photo = cardInfoHolder.getPhoto();
+        String photo = cardInfoHolder.getPhoto();
 
         String userProfileImgPath = cardInfoHolder.getUserProfileImgPath();
         String userName = cardInfoHolder.getUserName();
@@ -31,7 +32,7 @@ public class ViewPhotoFragment extends Fragment {
         captionTextView.setText(caption);
 
         ImageView photoImageView = (ImageView) rootView.findViewById(R.id.user_post_picture);
-        photoImageView.setImageResource(photo);
+//        photoImageView.setImageResource(photo);
 
         // todo set profile img
 

@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -25,6 +24,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Page_Publish extends Fragment {
@@ -84,8 +85,9 @@ public class Page_Publish extends Fragment {
                 // get time
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
-                Record record = new Record(dbFirebase.getCurrentUid(), picString, caption, "null", location, timeStamp);
+                Record record = new Record(dbFirebase.getCurrentUid(), picString, caption, location, timeStamp);
                 dbFirebase.addRecord(record);
+
 
                 // jump to homepage
                 Bundle bundle = new Bundle();

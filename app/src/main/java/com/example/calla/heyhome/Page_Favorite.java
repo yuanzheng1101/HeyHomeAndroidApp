@@ -15,8 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.util.Base64;
 
-import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -81,10 +81,10 @@ public class Page_Favorite extends Fragment {
 //                userRef.child(dbFirebase.getCurrentUid()).child("favorites").push().setValue(favorite);
 
                 // add comment
-                String rid = "-KJfqdlHgzcNZQWlGnQ7";
-                Comment comment = new Comment(dbFirebase.getCurrentUid(), "excellent!");
-                DatabaseReference recordRef = firebaseDatabase.getReference("RecordList");
-                recordRef.child(rid).child("comments").push().setValue(comment);
+                String rid = "-KJfqpyIzZmjLyfLvww0";
+                Comment comment = new Comment(rid, dbFirebase.getCurrentUid(), "good!");
+                DatabaseReference commentRef = firebaseDatabase.getReference("CommentList");
+                commentRef.push().setValue(comment);
 
             }
         });
@@ -169,6 +169,15 @@ public class Page_Favorite extends Fragment {
             }
 
         });
+    }
+
+    public Bitmap convertStringToBitmap(String imageString) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 8; // Experiment with different sizes
+
+        byte[] decodedImage = Base64.decode(imageString, Base64.DEFAULT);
+        Bitmap decodedImageByte = BitmapFactory.decodeByteArray(decodedImage, 0, decodedImage.length);
+        return decodedImageByte;
     }
 
 
