@@ -21,6 +21,7 @@ public class CardInfoHolder {
     protected String location;
     protected boolean favIcon;
     protected String userPostedTime;
+    protected String recordId;
 
 
 
@@ -45,6 +46,9 @@ public class CardInfoHolder {
     public void setUserPostedTime (String time) {
         this.userPostedTime = time;
     }
+    public void setRecordId (String recordId) {
+        this.recordId = recordId;
+    }
 
 
 
@@ -68,5 +72,8 @@ public class CardInfoHolder {
     }
     public String getUserPostedTime() {
         return userPostedTime;
+    }
+    public String getRecordId() {
+        return recordId;
     }
 }

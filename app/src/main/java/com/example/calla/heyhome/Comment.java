@@ -6,12 +6,14 @@ package com.example.calla.heyhome;
 public class Comment {
 
     private String rid;
-    private String uid;
+    private String userName;
+    private String userImage;
     private String content;
 
-    public Comment(String rid, String uid, String content) {
+    public Comment(String rid, String userName, String userImage, String content) {
         this.rid = rid;
-        this.uid = uid;
+        this.userName = userName;
+        this.userImage = userImage;
         this.content = content;
     }
 
@@ -23,8 +25,12 @@ public class Comment {
         return rid;
     }
 
-    public String getUid() {
-        return uid;
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getUserImage() {
+        return userImage;
     }
 
     public String getContent() {

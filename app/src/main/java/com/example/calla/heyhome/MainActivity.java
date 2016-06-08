@@ -2,6 +2,7 @@ package com.example.calla.heyhome;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     public static Uri imageUri;
 
     private FirebaseAuth mAuth;
+    private DBFirebase dbFirebase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
         // set bottom bar
         createButtomBar(savedInstanceState);
 
+        // manage session
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        SharedPreferences.Editor editor = pref.edit();
+
+//        dbFirebase.getCurrentUserInfo();
         // set Firebase
 //        Firebase.setAndroidContext(this);
 //        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -111,11 +118,24 @@ public class MainActivity extends AppCompatActivity {
 
         // Setting colors for different tabs when there's more than three of them.
         // You can set colors for tabs in three different ways as shown below.
-        mBottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
-        mBottomBar.mapColorForTab(1, 0xFF5D4037);
-        mBottomBar.mapColorForTab(2, "#7B1FA2");
-        mBottomBar.mapColorForTab(3, "#FF5252");
-        mBottomBar.mapColorForTab(4, "#FF9800");
+//        mBottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
+//        mBottomBar.mapColorForTab(1, 0xFF5D4037);
+//        mBottomBar.mapColorForTab(2, "#7B1FA2");
+//        mBottomBar.mapColorForTab(3, "#FF5252");
+//        mBottomBar.mapColorForTab(4, "#FF9800");
+
+//
+//        mBottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
+//        mBottomBar.mapColorForTab(1, "#ff0084");
+//        mBottomBar.mapColorForTab(2, "#e60077");
+//        mBottomBar.mapColorForTab(3, "#ff1a90");
+//        mBottomBar.mapColorForTab(4, "#b3005c");
+
+        mBottomBar.mapColorForTab(0, "#faa257");
+        mBottomBar.mapColorForTab(1, "#ff8c61");
+        mBottomBar.mapColorForTab(2, "#ce6a85");
+        mBottomBar.mapColorForTab(3, "#985277");
+        mBottomBar.mapColorForTab(4, "#5c374c");
     }
 
 
@@ -284,6 +304,7 @@ public class MainActivity extends AppCompatActivity {
                         + ".jpg";
         return filename;
     }
+
 
 
 

@@ -12,6 +12,7 @@ public class CardInfo {
     protected String userPostedPhoto; // R.id.photo todo need change this to string
     protected boolean favIcon;
     protected String userPostedTime;
+    protected String recordId;
 
     public CardInfo(String userPostedPhoto, String userPostedCaption) {
         this.userPostedPhoto = userPostedPhoto;
@@ -20,7 +21,7 @@ public class CardInfo {
 
     public CardInfo(String userProfileImgPath, String userName, String location,
                     String userPostedCaption, String userPostedPhoto, boolean favIcon,
-                    String userPostedTime) {
+                    String userPostedTime, String recordId) {
         this.userProfileImgPath = userProfileImgPath;
         this.userName = userName;
         this.location = location;
@@ -28,6 +29,7 @@ public class CardInfo {
         this.userPostedPhoto = userPostedPhoto;
         this.favIcon = favIcon;
         this.userPostedTime = userPostedTime;
+        this.recordId = recordId;
     }
 
     public String getUserProfileImgPath() {
@@ -50,6 +52,9 @@ public class CardInfo {
     }
     public String getUserPostedTime() {
         return userPostedTime;
+    }
+    public String getRecordId() {
+        return recordId;
     }
 
 }
