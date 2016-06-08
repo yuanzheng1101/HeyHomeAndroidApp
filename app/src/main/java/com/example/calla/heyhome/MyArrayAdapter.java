@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,9 +70,14 @@ public class MyArrayAdapter extends ArrayAdapter<CardInfo> {
         holder.vUserPostedCaption.setText(cardInfo.get(position).getUserPostedCaption());
 
         // set picture todo need change this to String
-        int fileName = cardInfo.get(position).getUserPostedPhoto();
-        holder.vUserPostedPhoto.setImageResource(fileName);
+//        int fileName = cardInfo.get(position).getUserPostedPhoto();
+//        holder.vUserPostedPhoto.setImageResource(fileName);
+
+        String imageString = cardInfo.get(position).getUserPostedPhoto();
+        holder.vUserPostedPhoto.setImageBitmap(convertStringToBitmap(imageString));
+
         holder.vUserPostedPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
 
         // set profile image
         // todo set profile image
@@ -156,5 +164,21 @@ public class MyArrayAdapter extends ArrayAdapter<CardInfo> {
         TextView vUserPostedTime;
         /*TextView vFriendName;
         TextView vFriendComment;*/
+    }
+
+
+    // calla: for load data from db
+    public void addCardInfo(CardInfo card) {
+        cardInfo.add(card);
+        notifyDataSetChanged();
+    }
+
+    public Bitmap convertStringToBitmap(String imageString) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 8; // Experiment with different sizes
+
+        byte[] decodedImage = Base64.decode(imageString, Base64.DEFAULT);
+        Bitmap decodedImageByte = BitmapFactory.decodeByteArray(decodedImage, 0, decodedImage.length);
+        return decodedImageByte;
     }
 }

@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 
@@ -43,6 +44,14 @@ public class DBFirebase {
 
     }
 
+    public void initializeComment(String rid) {
+        firebaseDatabase.getReference("CommentList").child(rid).setValue("empty");
+    }
+    public void addComment(Comment comment) {
+        firebaseDatabase.getReference("CommentList").push().setValue(comment);
+    }
+
+
     public void addRecord(Record record) {
         firebaseDatabase.getReference("RecordList").push().setValue(record);
     }
@@ -50,6 +59,7 @@ public class DBFirebase {
     public void addUser(String uid, User user) {
         firebaseDatabase.getReference("UserList").child(uid).setValue(user);
     }
+
 
 
     public void updateUser() {
@@ -141,6 +151,10 @@ public class DBFirebase {
         return mAuth.getCurrentUser().getUid();
     }
 
+    public void uploadProfileImage() {
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+
+    }
 
 
 }

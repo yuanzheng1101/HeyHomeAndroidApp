@@ -9,17 +9,17 @@ public class CardInfo {
     protected String userName;
     protected String location;
     protected String userPostedCaption;
-    protected int userPostedPhoto; // R.id.photo todo need change this to string
+    protected String userPostedPhoto; // R.id.photo todo need change this to string
     protected boolean favIcon;
     protected String userPostedTime;
 
-    public CardInfo(int userPostedPhoto, String userPostedCaption) {
+    public CardInfo(String userPostedPhoto, String userPostedCaption) {
         this.userPostedPhoto = userPostedPhoto;
         this.userPostedCaption = userPostedCaption;
     }
 
     public CardInfo(String userProfileImgPath, String userName, String location,
-                    String userPostedCaption, int userPostedPhoto, boolean favIcon,
+                    String userPostedCaption, String userPostedPhoto, boolean favIcon,
                     String userPostedTime) {
         this.userProfileImgPath = userProfileImgPath;
         this.userName = userName;
@@ -42,7 +42,7 @@ public class CardInfo {
     public String getUserPostedCaption() {
         return userPostedCaption;
     }
-    public int getUserPostedPhoto() {
+    public String getUserPostedPhoto() {
         return userPostedPhoto;
     }
     public boolean getFavIcon() {
