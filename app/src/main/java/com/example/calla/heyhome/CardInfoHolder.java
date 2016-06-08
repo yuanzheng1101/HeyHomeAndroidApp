@@ -15,7 +15,7 @@ public class CardInfoHolder {
     }
 
     private String userPostedCaption;
-    protected int userPostedPhoto; // R.id.photo todo need change this to string
+    protected String userPostedPhoto; // R.id.photo todo need change this to string
     protected String userProfileImgPath;
     protected String userName;
     protected String location;
@@ -27,7 +27,7 @@ public class CardInfoHolder {
     public void setCaption(String caption) {
         this.userPostedCaption = caption;
     }
-    public void setPhoto(int photo) {
+    public void setPhoto(String photo) {
         this.userPostedPhoto = photo;
     }
     public void setUserProfileImgPath(String profileImg) {
@@ -51,7 +51,7 @@ public class CardInfoHolder {
     public String getCaption() {
         return userPostedCaption;
     }
-    public int getPhoto() {
+    public String getPhoto() {
         return userPostedPhoto;
     }
     public String getUserProfileImgPath() {

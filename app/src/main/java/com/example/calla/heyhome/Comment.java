@@ -5,16 +5,22 @@ package com.example.calla.heyhome;
  */
 public class Comment {
 
+    private String rid;
     private String uid;
     private String content;
 
-    public Comment(String uid, String content) {
+    public Comment(String rid, String uid, String content) {
+        this.rid = rid;
         this.uid = uid;
         this.content = content;
     }
 
     public Comment() {
 
+    }
+
+    public String getRid() {
+        return rid;
     }
 
     public String getUid() {
@@ -24,4 +30,5 @@ public class Comment {
     public String getContent() {
         return content;
     }
+
 }
