@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class AddPeopleFragment extends Fragment implements AdapterView.OnItemClickListener {
 
-    // todo set listener
+    // todo set listener to open Me
 
     List<SearchPeopleCardInfo> cardInfo;
 

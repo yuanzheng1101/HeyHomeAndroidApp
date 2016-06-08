@@ -2,28 +2,22 @@ package com.example.calla.heyhome;
 
 
 import android.app.Fragment;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +55,14 @@ public class Page_Homepage extends Fragment implements AdapterView.OnItemClickLi
         lv.setAdapter(recordAdapter);
         lv.setOnItemClickListener(this);
 
+        ImageView addPeople = (ImageView) rootView.findViewById(R.id.menu_add_people);
+        addPeople.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPageAddPeople();
+            }
+        });
+
         showRecords();
 
         return rootView;
@@ -73,7 +75,15 @@ public class Page_Homepage extends Fragment implements AdapterView.OnItemClickLi
         CardInfoHolder cardInfoHolder = CardInfoHolder.getInstance();
         cardInfoHolder.setCaption(oneCard.getUserPostedCaption());
         cardInfoHolder.setPhoto(oneCard.getUserPostedPhoto());
-//        openPageViewPhoto();
+        openPageViewPhoto();
+    }
+
+    private void openPageAddPeople() {
+        Bundle bundle = new Bundle();
+        AddPeopleFragment page = new AddPeopleFragment();
+        page.setArguments(bundle);
+        getFragmentManager().beginTransaction().replace(R.id.mainFragment, page).commit();
+
     }
 
 

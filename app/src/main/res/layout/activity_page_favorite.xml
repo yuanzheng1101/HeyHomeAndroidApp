@@ -6,6 +6,8 @@
     android:orientation="vertical"
     tools:context="com.example.calla.heyhome.Page_Favorite">
 
+    <include layout="@layout/homepage_toolbar" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

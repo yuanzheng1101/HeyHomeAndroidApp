@@ -4,10 +4,9 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.util.Base64;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,9 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
 public class Page_Favorite extends Fragment {
@@ -47,6 +42,15 @@ public class Page_Favorite extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.activity_page_favorite, container, false);
+
+        ImageView addPeople = (ImageView) rootView.findViewById(R.id.menu_add_people);
+        addPeople.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPageAddPeople();
+            }
+        });
+        //show the whole page here
 
         // instantiate Firebase
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -138,6 +142,15 @@ public class Page_Favorite extends Fragment {
 
         return rootView;
     }
+
+    private void openPageAddPeople() {
+        Bundle bundle = new Bundle();
+        AddPeopleFragment page = new AddPeopleFragment();
+        page.setArguments(bundle);
+        getFragmentManager().beginTransaction().replace(R.id.mainFragment, page).commit();
+
+    }
+
 
 
 

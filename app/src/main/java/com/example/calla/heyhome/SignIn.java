@@ -1,11 +1,9 @@
 package com.example.calla.heyhome;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +16,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SignIn extends AppCompatActivity {
@@ -107,8 +104,13 @@ public class SignIn extends AppCompatActivity {
     }
 
     private void signIn() {
+        Log.d("position", "signIn()");
         String emailS = email.getText().toString();
         String passwordS = password.getText().toString();
+
+        System.out.println(emailS);
+        System.out.println(passwordS);
+
         mAuth.signInWithEmailAndPassword(emailS, passwordS)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -117,7 +119,7 @@ public class SignIn extends AppCompatActivity {
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Log.w("sign in", "signInWithEmail", task.getException());
+                            Log.d("sign in", "signInWithEmail", task.getException());
                             Toast.makeText(SignIn.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         } else {

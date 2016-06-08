@@ -6,6 +6,8 @@
     android:orientation="vertical"
     tools:context="com.example.calla.heyhome.Page_Gallery">
 
+    <include layout="@layout/homepage_toolbar" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

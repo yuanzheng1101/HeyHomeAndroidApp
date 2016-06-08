@@ -1,13 +1,7 @@
 package com.example.calla.heyhome;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,30 +15,33 @@ import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * Created by yuan on 6/6/16.
  */
-public class ViewMapFragment extends Fragment implements OnMapReadyCallback {
+public class ViewMapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     LatLng pictureLocation;
-    private FragmentActivity myContext;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_view_map, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_view_map);
 
         LLHolder llHolder = LLHolder.getInstance();
-        String latitude = llHolder.getLatitude();
-        String longitude = llHolder.getLongitude();
+        // todo set latitude from getLatitude()
+        /*String latitude = llHolder.getLatitude();
+        String longitude = llHolder.getLongitude();*/
+
+        String latitude = "0";
+        String longitude = "0";
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        FragmentManager fragManager = myContext.getSupportFragmentManager();
-        SupportMapFragment mapFragment = (SupportMapFragment) fragManager.findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         // set interesting locations
         pictureLocation = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
-
-        return rootView;
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -59,12 +56,6 @@ public class ViewMapFragment extends Fragment implements OnMapReadyCallback {
         ui.setAllGesturesEnabled(true);
         ui.setCompassEnabled(true);
         ui.setZoomControlsEnabled(true);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        myContext=(FragmentActivity) activity;
-        super.onAttach(activity);
     }
 
 }
