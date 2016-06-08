@@ -9,11 +9,12 @@ public class CardInfo {
     protected String userName;
     protected String location;
     protected String userPostedCaption;
-    protected String userPostedPhoto; // R.id.photo todo need change this to string
+    protected String userPostedPhoto;
     protected int intUserPostedPhoto;
     protected boolean favIcon;
     protected String userPostedTime;
     protected String recordId;
+    protected String userId;
 
     public CardInfo(int userPostedPhoto, String userPostedCaption) {
         this.intUserPostedPhoto = userPostedPhoto;
@@ -28,7 +29,7 @@ public class CardInfo {
 
     public CardInfo(String userProfileImgPath, String userName, String location,
                     String userPostedCaption, String userPostedPhoto, boolean favIcon,
-                    String userPostedTime, String recordId) {
+                    String userPostedTime, String recordId, String userId) {
         this.userProfileImgPath = userProfileImgPath;
         this.userName = userName;
         this.location = location;
@@ -37,6 +38,7 @@ public class CardInfo {
         this.favIcon = favIcon;
         this.userPostedTime = userPostedTime;
         this.recordId = recordId;
+        this.userId = userId;
     }
 
     public String getUserProfileImgPath() {
@@ -64,4 +66,7 @@ public class CardInfo {
         return recordId;
     }
 
+    public String getUserId() {
+        return userId;
+    }
 }

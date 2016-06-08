@@ -8,10 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by yuan on 6/6/16.
@@ -41,7 +42,7 @@ public class SearchPeopleAdapter extends ArrayAdapter<SearchPeopleCardInfo> {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.search_people_card_layout, parent, false);
             holder = new ScrapViewHolder();
-            holder.vUserProfileImg = (ImageView) row.findViewById(R.id.result_image);
+            holder.vUserProfileImg = (CircleImageView) row.findViewById(R.id.result_image);
             holder.vUserName = (TextView) row.findViewById(R.id.user_name);
             row.setTag(holder);
         } else {
@@ -58,7 +59,7 @@ public class SearchPeopleAdapter extends ArrayAdapter<SearchPeopleCardInfo> {
     }
 
     public class ScrapViewHolder {
-        ImageView vUserProfileImg;
+        CircleImageView vUserProfileImg;
         TextView vUserName;
     }
 

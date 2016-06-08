@@ -122,22 +122,6 @@ public class Page_Favorite extends Fragment {
 
 
         image = (ImageView) rootView.findViewById(R.id.imageView);
-//        final long ONE_MEGABYTE = 1024 * 1024;
-//        fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//            @Override
-//            public void onSuccess(byte[] bytes) {
-//                // Data for "images/image1.png" is returns, use this as needed
-//                Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-//                image.setImageBitmap(bm);
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                // Handle any errors
-//                exception.printStackTrace();
-//                System.out.println("Failed to load image from Firebase storage!!!");
-//            }
-//        });
 
 
         return rootView;
