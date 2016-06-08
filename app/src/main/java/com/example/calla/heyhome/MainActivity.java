@@ -3,7 +3,6 @@ package com.example.calla.heyhome;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,23 +11,17 @@ import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 
-//import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+//import com.firebase.client.Firebase;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         // check user logged in or not
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() == null) {
@@ -73,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         // lose the current tab on orientation change.
         mBottomBar.onSaveInstanceState(outState);
     }
+
 
     public void createButtomBar(Bundle savedInstanceState) {
         mBottomBar = BottomBar.attach(this, savedInstanceState);
@@ -111,11 +104,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Setting colors for different tabs when there's more than three of them.
         // You can set colors for tabs in three different ways as shown below.
-        mBottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
-        mBottomBar.mapColorForTab(1, 0xFF5D4037);
-        mBottomBar.mapColorForTab(2, "#7B1FA2");
-        mBottomBar.mapColorForTab(3, "#FF5252");
-        mBottomBar.mapColorForTab(4, "#FF9800");
+        mBottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.pink_0));
+        mBottomBar.mapColorForTab(1, ContextCompat.getColor(this, R.color.pink_1));
+        mBottomBar.mapColorForTab(2, ContextCompat.getColor(this, R.color.pink_2));
+        mBottomBar.mapColorForTab(3, ContextCompat.getColor(this, R.color.pink_3));
+        mBottomBar.mapColorForTab(4, ContextCompat.getColor(this, R.color.pink_4));
     }
 
 
@@ -164,33 +157,6 @@ public class MainActivity extends AppCompatActivity {
         getFragmentManager().beginTransaction()
                 .replace(R.id.mainFragment, page)
                 .commit();
-    }
-
-    private void openPageAddPeople() {
-        Bundle bundle = new Bundle();
-        AddPeopleFragment page = new AddPeopleFragment();
-        page.setArguments(bundle);
-        getFragmentManager().beginTransaction().replace(R.id.mainFragment,page).commit();
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.homepage_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.menu_add_people:
-                openPageAddPeople();
-                break;
-            default:
-                break;
-        }
-        return true;
     }
 
 
@@ -284,7 +250,6 @@ public class MainActivity extends AppCompatActivity {
                         + ".jpg";
         return filename;
     }
-
 
 
 }

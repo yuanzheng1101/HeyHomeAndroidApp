@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -56,6 +57,13 @@ public class Page_Gallery extends Fragment implements AdapterView.OnItemSelected
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.activity_page_gallery, container, false);
+        ImageView addPeople = (ImageView) rootView.findViewById(R.id.menu_add_people);
+        addPeople.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPageAddPeople();
+            }
+        });
         context = this.getActivity().getApplicationContext();
 
         // initialize database and storage
@@ -132,6 +140,15 @@ public class Page_Gallery extends Fragment implements AdapterView.OnItemSelected
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         // TODO: 5/26/16 show solo picture
     }
+
+    private void openPageAddPeople() {
+        Bundle bundle = new Bundle();
+        AddPeopleFragment page = new AddPeopleFragment();
+        page.setArguments(bundle);
+        getFragmentManager().beginTransaction().replace(R.id.mainFragment, page).commit();
+
+    }
+
 
 
 
