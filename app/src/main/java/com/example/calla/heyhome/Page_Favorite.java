@@ -64,16 +64,11 @@ public class Page_Favorite extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                User user1 = new User("John", "johnpass", "john@scu", "jjjjjj", "johnImage", 0, 0);
-//                User user2 = new User("Green", "greenpass", "green@scu", "ggggg", "greenImage", 4, 5);
-//                dbFirebase.addUser(user1);
-//                dbFirebase.addUser(user2);
-//                dbFirebase.getUser(dbFirebase.getCurrentUid());
 
-                SessionManager sessionManager = new SessionManager(getActivity().getApplicationContext());
-                String name = sessionManager.getCurrentUserName();
-                System.out.println("I found user name from session! " + name);
-
+//                addFollowings("8MCULOFoXRWIDyK8XApP4w1EBuH3");
+//                getFollowingAndFollowerCount();
+//                unFollowing("8MCULOFoXRWIDyK8XApP4w1EBuH3");
+                checkFollowing("8MCULOFoXRWIDyK8XApP4w1EBuH3");
             }
         });
 
@@ -186,6 +181,251 @@ public class Page_Favorite extends Fragment {
         return decodedImageByte;
     }
 
+
+    public void addFollowings(String id) {
+        final String uid = sessionManager.getCurrentUserId();
+        final String followingId = id;
+
+        final DatabaseReference userRef = firebaseDatabase.getReference("UserList");
+
+        Query query1 = userRef.orderByKey().equalTo(uid);
+        query1.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+                User user = snapshot.getValue(User.class);
+                userRef.child(uid).child("followings").setValue(user.getFollowings() + followingId  + ",");
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        Query query2 = userRef.orderByKey().equalTo(followingId);
+        query2.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+                User user = snapshot.getValue(User.class);
+                userRef.child(followingId).child("followers").setValue(user.getFollowers() + uid  + ",");
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void getFollowingAndFollowerCount() {
+        final String uid = sessionManager.getCurrentUserId();
+
+        final DatabaseReference userRef = firebaseDatabase.getReference("UserList");
+
+        Query query = userRef.orderByKey().equalTo(uid);
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+                User user = snapshot.getValue(User.class);
+                String[] followings = user.getFollowings().split(",");
+                String[] followers = user.getFollowers().split(",");
+
+                int followingCount = 0;
+                int followerCount = 0;
+                if (followings.length == 1 && followings[0].equals("")) {
+                    followingCount = 0;
+                } else {
+                    followingCount = followings.length;
+                }
+
+                if (followers.length == 1 && followers[0].equals("")) {
+                    followerCount = 0;
+                } else {
+                    followerCount = followers.length;
+                }
+
+                System.out.println("getFollowingAndFollowerCount" + followingCount + " & " + followerCount);
+
+                // set Page_Me UI with followingCount and followerCount
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+
+        });
+    }
+
+    public void checkFollowing(String id) {
+        final String uid = sessionManager.getCurrentUserId();
+        final String followingId = id;
+        final DatabaseReference userRef = firebaseDatabase.getReference("UserList");
+
+        Query query = userRef.orderByKey().equalTo(uid);
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+                User user = snapshot.getValue(User.class);
+                String[] strs = user.getFollowings().split(",");
+                for (String s : strs) {
+                    if (followingId.equals(s)) {
+                        // current user is following this record user
+                        System.out.println("already followed!");
+
+                    } else {
+                        // current user is following this record user
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void unFollowing(String id) {
+        final String uid = sessionManager.getCurrentUserId();
+        final String followingId = id;
+
+        final DatabaseReference userRef = firebaseDatabase.getReference("UserList");
+
+        Query query1 = userRef.orderByKey().equalTo(uid);
+        query1.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+                User user = snapshot.getValue(User.class);
+                StringBuilder newFollowings = new StringBuilder();
+                String[] strs = user.getFollowings().split(",");
+                for (String s : strs) {
+                    if (!s.equals(followingId)) {
+                        newFollowings.append(s + ",");
+                    }
+                }
+                userRef.child(uid).child("followings").setValue(newFollowings.toString());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        Query query2 = userRef.orderByKey().equalTo(followingId);
+        query2.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+                User user = snapshot.getValue(User.class);
+                StringBuilder newFollowers = new StringBuilder();
+                String[] strs = user.getFollowers().split(",");
+                for (String s : strs) {
+                    if (!s.equals(uid)) {
+                        newFollowers.append(s + ",");
+                    }
+                }
+                userRef.child(followingId).child("followers").setValue(newFollowers.toString());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 
 }

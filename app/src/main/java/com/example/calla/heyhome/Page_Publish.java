@@ -3,11 +3,13 @@ package com.example.calla.heyhome;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +18,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationListener;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -29,16 +36,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class Page_Publish extends Fragment {
+
+public class Page_Publish extends Fragment implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
     private DBFirebase dbFirebase;
     SessionManager sessionManager;
 
     ImageView imageView;
     EditText caption;
 
+    // for geo location
+    GoogleApiClient mGoogleApiClient = null;
+    Location mLastLocation;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_page_publish, container, false);
+
 
         // instantiate databse
         dbFirebase = new DBFirebase(getActivity().getApplicationContext());
@@ -50,6 +66,16 @@ public class Page_Publish extends Fragment {
         // instantiate components
         imageView = (ImageView) rootView.findViewById(R.id.image);
         caption = (EditText) rootView.findViewById(R.id.caption);
+
+
+        // Create an instance of GoogleAPIClient.
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(getActivity().getApplicationContext())
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
 
         // set preview photo from camera
         if (MainActivity.imageUri != null) {
@@ -85,8 +111,13 @@ public class Page_Publish extends Fragment {
                 String caption = tv.getText().toString();
 
                 // get location
-                // TODO: 6/7/16
-                String location = "location";
+                startTrackLocation();
+                stopTrackLocation();
+                String location =
+                        String.format("%.4f", mLastLocation.getLatitude())
+                                + ","
+                                + String.format("%.4f", mLastLocation.getLongitude());
+                System.out.println("location: " + location);
 
                 // get time
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -123,6 +154,49 @@ public class Page_Publish extends Fragment {
         String picString = Base64.encodeToString(bytes, Base64.DEFAULT);
         return picString;
     }
+
+    // for geo location
+    private void startTrackLocation() {
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(2000);
+        mLocationRequest.setFastestInterval(500);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
+
+    private void stopTrackLocation() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mGoogleApiClient.disconnect();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+    }
+
 
 
 
