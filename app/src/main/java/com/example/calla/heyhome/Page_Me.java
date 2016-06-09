@@ -36,12 +36,16 @@ public class Page_Me extends Fragment {
     private final StringBuilder recordTime = new StringBuilder();
     private final StringBuilder userPhoto = new StringBuilder();
 
+    private SessionManager sessionManager;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.activity_page_me, container, false);
         //show the whole page here
+
+        sessionManager = new SessionManager(getActivity().getApplicationContext());
 
         //initialize firebase
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -112,7 +116,10 @@ public class Page_Me extends Fragment {
             public void onChildAdded(DataSnapshot snapshot, String previousChild) {
                 Record record = snapshot.getValue(Record.class);
 
-                String uid = "FIfBOs96HHhmITijarvjx5MDGnI2";
+
+                String uid = sessionManager.getCurrentUserId();
+//                String uid = "FIfBOs96HHhmITijarvjx5MDGnI2";
+                System.out.println("current user id: " + uid);
                 if (record.getUserId().equals(uid)) {
 
                     CardInfo card = new CardInfo(record.getUserImage(), record.getUserName(), record.getLocation(),

@@ -152,6 +152,7 @@ public class DBFirebase {
 
     public void getCurrentUserInfo() {
         if (mAuth.getCurrentUser() != null) {
+            System.out.println();
             String currentUid = mAuth.getCurrentUser().getUid();
 
             DatabaseReference userRef = firebaseDatabase.getReference("UserList");
@@ -160,6 +161,7 @@ public class DBFirebase {
                 @Override
                 public void onChildAdded(DataSnapshot snapshot, String previousChild) {
                     User user = snapshot.getValue(User.class);
+
 
                     SessionManager sessionManager = new SessionManager(context);
                     sessionManager.createSignInSession(mAuth.getCurrentUser().getUid(), user.getName(), user.getPhoto());
