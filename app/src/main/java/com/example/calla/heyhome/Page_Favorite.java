@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,8 +14,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -318,10 +315,11 @@ public class Page_Favorite extends Fragment {
                 for (String s : strs) {
                     if (followingId.equals(s)) {
                         // current user is following this record user
-                        System.out.println("already followed!");
-
+                        FFHolder ffHolder = FFHolder.getInstance();
+                        ffHolder.setWhetherFollowing("true");
                     } else {
-                        // current user is following this record user
+                        FFHolder ffHolder = FFHolder.getInstance();
+                        ffHolder.setWhetherFollowing("flase");
                     }
                 }
             }

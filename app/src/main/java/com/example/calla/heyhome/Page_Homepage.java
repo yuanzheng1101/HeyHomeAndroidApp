@@ -16,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,6 @@ public class Page_Homepage extends Fragment implements AdapterView.OnItemClickLi
         // get followings
         getFollowings();
 
-        // todo only two parameter here, need to change
         cardInfo = new ArrayList<>();
 
         ListView lv = (ListView) rootView.findViewById(R.id.listView);
@@ -155,7 +155,7 @@ public class Page_Homepage extends Fragment implements AdapterView.OnItemClickLi
         final String uid = sessionManager.getCurrentUserId();
 
         DatabaseReference userRef = firebaseDatabase.getReference("UserList");
-        Query query = userRef.orderByKey().equalTo(uid);
+        Query query = userRef.equalTo(uid);
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChild) {

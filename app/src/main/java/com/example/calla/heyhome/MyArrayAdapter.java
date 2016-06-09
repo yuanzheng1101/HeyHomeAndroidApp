@@ -94,6 +94,8 @@ public class MyArrayAdapter extends ArrayAdapter<CardInfo> {
         String imageString = cardInfo.get(position).getUserPostedPhoto();
         holder.vUserPostedPhoto.setImageBitmap(convertStringToBitmap(imageString));
         holder.vUserPostedPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        // get userId
+        final String userId = cardInfo.get(position).getUserId();
         // set profile image
         String profileImgString = cardInfo.get(position).getUserProfileImgPath();
         StorageReference fileRef = storageRef.child("pics/" + profileImgString);
@@ -116,6 +118,8 @@ public class MyArrayAdapter extends ArrayAdapter<CardInfo> {
         holder.vUserProfileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                RecordUserIdHolder ruih = RecordUserIdHolder.getInstance();
+                ruih.setUserId(userId);
                 openPageMe();
             }
         });
@@ -174,8 +178,13 @@ public class MyArrayAdapter extends ArrayAdapter<CardInfo> {
         // set time
         String timeStamp = cardInfo.get(position).getUserPostedTime();
         StringBuilder sb = new StringBuilder();
-//        sb.append(timeStamp)
-        holder.vUserPostedTime.setText(cardInfo.get(position).getUserPostedTime());
+        sb.append(timeStamp.substring(4,6))
+                .append("/").append(timeStamp.substring(6,8))
+                .append(" ").append(timeStamp.substring(9,11))
+                .append(":").append(timeStamp.substring(11,13));
+        String time = sb.toString();
+        holder.vUserPostedTime.setText(time);
+
 
         // forward to other app
         holder.vUserForwardIcon.setOnClickListener(new View.OnClickListener()

@@ -86,6 +86,7 @@ public class ViewPhotoFragment extends Fragment {
         // set username
         TextView userNameTextView = (TextView) rootView.findViewById(R.id.user_name);
         userNameTextView.setText(userName);
+
         // set location
         TextView locationTextView = (TextView) rootView.findViewById(R.id.post_location);
         Log.i("view photo", location);
@@ -123,9 +124,15 @@ public class ViewPhotoFragment extends Fragment {
                 // todo change the mark status in database
             }
         });
-
+        // set time
         TextView userPostTimeTextView = (TextView) rootView.findViewById(R.id.user_post_time);
-        userPostTimeTextView.setText(userPostedTime);
+        StringBuilder sb = new StringBuilder();
+        sb.append(userPostedTime.substring(4,6))
+                .append("/").append(userPostedTime.substring(6,8))
+                .append(" ").append(userPostedTime.substring(9,11))
+                .append(":").append(userPostedTime.substring(11,13));
+        String time = sb.toString();
+        userPostTimeTextView.setText(time);
 
         // forward to other app
         ImageView forwardImageView = (ImageView) rootView.findViewById(R.id.user_post_forward_icon);
@@ -141,7 +148,6 @@ public class ViewPhotoFragment extends Fragment {
                 getActivity().startActivity(Intent.createChooser(shareIntent, getActivity().getResources().getText(R.string.send_to)));
             }
         });
-
 
         return rootView;
     }
