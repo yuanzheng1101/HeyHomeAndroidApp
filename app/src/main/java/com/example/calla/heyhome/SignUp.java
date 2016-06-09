@@ -57,6 +57,7 @@ public class SignUp extends AppCompatActivity {
 
                     User userInfo = new User("new user", "", "", "", "", "favorite");
                     dbFirebase.addUser(uid, userInfo);
+                    dbFirebase.getCurrentUserInfo();
                 } else {
                     // User is signed out
                     Log.d("sign up", "onAuthStateChanged:signed_out");

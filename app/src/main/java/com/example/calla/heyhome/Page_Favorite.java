@@ -64,11 +64,10 @@ public class Page_Favorite extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                addFollowings("8MCULOFoXRWIDyK8XApP4w1EBuH3");
+                addFollowings("L8KbuItqSfRBb6ul6NQCSV1rTDT2");
+//                unFollowing("L8KbuItqSfRBb6ul6NQCSV1rTDT2");
 //                getFollowingAndFollowerCount();
-//                unFollowing("8MCULOFoXRWIDyK8XApP4w1EBuH3");
-                checkFollowing("8MCULOFoXRWIDyK8XApP4w1EBuH3");
+//                checkFollowing("9D4KuoiUCmY5p4NGJwZcUviLQjS2");
             }
         });
 
@@ -117,6 +116,22 @@ public class Page_Favorite extends Fragment {
 
 
         image = (ImageView) rootView.findViewById(R.id.imageView);
+//        final long ONE_MEGABYTE = 1024 * 1024;
+//        fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//            @Override
+//            public void onSuccess(byte[] bytes) {
+//                // Data for "images/image1.png" is returns, use this as needed
+//                Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//                image.setImageBitmap(bm);
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Handle any errors
+//                exception.printStackTrace();
+//                System.out.println("Failed to load image from Firebase storage!!!");
+//            }
+//        });
 
 
         return rootView;
@@ -130,47 +145,6 @@ public class Page_Favorite extends Fragment {
 
     }
 
-
-
-
-    // for database
-    public void getUser(String uid) {
-        DatabaseReference userRef = firebaseDatabase.getReference("UserList");
-
-        Query query = userRef.orderByKey().equalTo(uid);
-        query.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
-                System.out.println(snapshot.getKey());
-                System.out.println(snapshot.getValue());
-                User user = snapshot.getValue(User.class);
-
-//                // store uid into seesion
-//                sessionManager.createLoginSession(user);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-        });
-    }
 
     public Bitmap convertStringToBitmap(String imageString) {
         BitmapFactory.Options options = new BitmapFactory.Options();

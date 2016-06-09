@@ -27,7 +27,7 @@ public class SessionManager {
     }
 
     public void createSignInSession(String uid, String name, String image) {
-        editor.putString("id", uid);
+        editor.putString(KEY_ID, uid);
         editor.putString(KEY_NAME, name);
         editor.putString(KEY_IMAGE, image);
         editor.commit();

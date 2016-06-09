@@ -10,12 +10,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +31,7 @@ public class Page_Homepage extends Fragment implements AdapterView.OnItemClickLi
 
     private FirebaseDatabase firebaseDatabase;
     private SessionManager sessionManager;
+    private FirebaseAuth mAuth;
 
     final private ArrayList<String> followings = new ArrayList<>();
 
@@ -39,12 +43,16 @@ public class Page_Homepage extends Fragment implements AdapterView.OnItemClickLi
 
         // initialize firebase
         firebaseDatabase = FirebaseDatabase.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         // instantiate session
         sessionManager = new SessionManager(getActivity().getApplicationContext());
 
         // get followings
-        getFollowings();
+        if (mAuth.getCurrentUser() != null) {
+            getFollowings();
+        }
+
 
         // todo only two parameter here, need to change
         cardInfo = new ArrayList<>();
@@ -62,7 +70,10 @@ public class Page_Homepage extends Fragment implements AdapterView.OnItemClickLi
             }
         });
 
-        showRecords();
+        if (mAuth.getCurrentUser() != null) {
+            showRecords();
+        }
+
 
         return rootView;
     }
@@ -70,17 +81,10 @@ public class Page_Homepage extends Fragment implements AdapterView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         CardInfo oneCard = cardInfo.get(position);
+        Toast.makeText(getActivity(), "clicked : " + oneCard.getUserPostedCaption(), Toast.LENGTH_SHORT).show();
         CardInfoHolder cardInfoHolder = CardInfoHolder.getInstance();
         cardInfoHolder.setCaption(oneCard.getUserPostedCaption());
         cardInfoHolder.setPhoto(oneCard.getUserPostedPhoto());
-        cardInfoHolder.setUserProfileImgPath(oneCard.getUserProfileImgPath());
-        cardInfoHolder.setUserName(oneCard.getUserName());
-        cardInfoHolder.setLocation(oneCard.getLocation());
-        cardInfoHolder.setFavIcon(oneCard.getFavIcon());
-        cardInfoHolder.setUserPostedTime(oneCard.getUserPostedTime());
-        cardInfoHolder.setRecordId(oneCard.getRecordId());
-        cardInfoHolder.setUserId(oneCard.getUserId());
-
         openPageViewPhoto();
     }
 
@@ -103,7 +107,6 @@ public class Page_Homepage extends Fragment implements AdapterView.OnItemClickLi
     }
 
 
-
     public void showRecords() {
         recordAdapter.clear();
         DatabaseReference recordRef = firebaseDatabase.getReference("RecordList");
@@ -113,10 +116,12 @@ public class Page_Homepage extends Fragment implements AdapterView.OnItemClickLi
             public void onChildAdded(DataSnapshot snapshot, String previousChild) {
                 Record record = snapshot.getValue(Record.class);
 
+//                String uid = "FIfBOs96HHhmITijarvjx5MDGnI2";
+                System.out.println("showRecords: " + followings.size());
                 if (followings.contains(record.getUserId())) {
 
                     CardInfo card = new CardInfo(record.getUserImage(), record.getUserName(), record.getLocation(),
-                            record.getCaption(), record.getImage(), false, record.getTime(), snapshot.getKey(), record.getUserId());
+                            record.getCaption(), record.getImage(), false, record.getTime(), snapshot.getKey());
 
                     recordAdapter.addCardInfo(card);
 
@@ -152,10 +157,11 @@ public class Page_Homepage extends Fragment implements AdapterView.OnItemClickLi
 
     public void getFollowings() {
         followings.clear();
-        final String uid = sessionManager.getCurrentUserId();
-
+        String uid = sessionManager.getCurrentUserId();
+        Log.d("position", "getFollowings: " + uid);
         DatabaseReference userRef = firebaseDatabase.getReference("UserList");
-        Query query = userRef.orderByKey().equalTo(uid);
+
+        Query query = userRef.equalTo(sessionManager.getCurrentUserId());
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChild) {
@@ -163,6 +169,7 @@ public class Page_Homepage extends Fragment implements AdapterView.OnItemClickLi
                 String[] strs = user.getFollowings().split(",");
                 for (String s : strs) {
                     followings.add(s);
+                    System.out.println(followings.size());
                 }
             }
 
@@ -197,7 +204,7 @@ public class Page_Homepage extends Fragment implements AdapterView.OnItemClickLi
 
         final DatabaseReference userRef = firebaseDatabase.getReference("UserList");
 
-        Query query = userRef.orderByKey().equalTo(uid);
+        Query query = userRef.equalTo(uid);
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChild) {
